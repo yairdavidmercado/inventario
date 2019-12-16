@@ -2,7 +2,7 @@
 // start a session
 session_start();
  if (!isset($_SESSION['idUser'])) {
-    header ("Location:index.php"); 
+    header ("Location:/inventario/index.php"); 
  }
 // manipulate session variables
 ?>
@@ -46,7 +46,7 @@ session_start();
                     <!-- <a class="dropdown-item" href="#">Action</a>
                     <a class="dropdown-item" href="#">Another action</a> -->
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="php/cerrar_sesion.php">Cerrar sesión</a>
+                    <a class="dropdown-item" href="/inventario/php/cerrar_sesion.php">Cerrar sesión</a>
                 </div>
                 </li>
             </ul>
@@ -54,7 +54,7 @@ session_start();
         </div>
     </div>
   </nav>
-  <script src="assets/js/jquery.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  <script src="/inventario/assets/js/jquery.slim.min.js" crossorigin="anonymous"></script>
   <script>
   $(function() {
         console.log( "ready!" );

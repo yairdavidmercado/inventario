@@ -12,7 +12,7 @@
     <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/sign-in/">
 
     <!-- Bootstrap core CSS -->
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
 
     <style>
@@ -88,7 +88,7 @@
       <button class="btn btn-lg btn-warning btn-block" style="color:#fff" type="submit"><b>Iniciar sesión</b></button>
     </form>
 
-    <script src="assets/js/jquery.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="assets/js/jquery.slim.min.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
   function validar_sesion() {

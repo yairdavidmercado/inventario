@@ -86,7 +86,7 @@
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <a  href="/form/proveedor" class="btn btn-sm" style="background-color: #6c63ff; color:#fff">Registrar proveedores</a>
+                  <a  href="view/formularios/proveedor.php" class="btn btn-sm" style="background-color: #6c63ff; color:#fff">Registrar proveedores</a>
                 </div>
                 <!-- <small class="text-muted">9 mins</small> -->
               </div>
