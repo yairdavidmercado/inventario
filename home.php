@@ -12,7 +12,7 @@
     <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/offcanvas/">
 
     <!-- Bootstrap core CSS -->
-<link href="assets/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<link href="assets/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
 <meta name="theme-color" content="#563d7c">
 
@@ -266,8 +266,10 @@
     </div>
   </div>
 </main>
-<script src="assets/js/jquery.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-      <script>window.jQuery || document.write('<script src="assets/js/jquery.slim.min.js"><\/script>')</script><script src="assets/js/bootstrap.bundle.min.js" integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" crossorigin="anonymous"></script>
+<script src="assets/js/jquery.slim.min.js" crossorigin="anonymous"></script>
+      <script>window.jQuery || document.write('<script src="assets/js/jquery.slim.min.js"><\/script>')</script>
+      <script src="assets/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
 $(function() {
         console.log( "index!" );

@@ -59,4 +59,10 @@ session_start();
   $(function() {
         console.log( "ready!" );
   });
+  function notificacion(message, type) {
+    $.notify({
+	    message: message,
+        type: type,
+    });
+  }
   </script>

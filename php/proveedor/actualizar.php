@@ -1,12 +1,13 @@
 <?php
 session_start(); 
-$nit = $_POST["nit"];
-$nombre = $_POST["nombre"];
-$direccion = $_POST["direccion"];
-$telefono = $_POST["telefono"];
-$email = $_POST["email"];
+$id = $_POST["id1"];
+$nit = $_POST["nit1"];
+$nombre = $_POST["nombre1"];
+$direccion = $_POST["direccion1"];
+$telefono = $_POST["telefono1"];
+$email = $_POST["email1"];
 $user_id = $_SESSION["idUser"];
-$state = "1";
+$state = $_POST["state1"];
 
 $response = array();
 include '../../php/conexion.php';
@@ -17,15 +18,15 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "CALL guardar_proveedor('".$nit."', '".$nombre."', '".$direccion."', '".$telefono."', '".$email."', '".$user_id."','".$state."');";
+$sql = "CALL actualizar_proveedor('".$id."','".$nit."', '".$nombre."', '".$direccion."', '".$telefono."', '".$email."', '".$user_id."','".$state."');";
 $result = $conn->query($sql);
 
 while ($row = $result->fetch_assoc()) {
     $row_cnt = $result->num_rows;
     if ($row_cnt > 0) {
         $response["success"] = true;
-        $response["message"] = "Su proveedor ha sido actualizado con el numero: ".$row["LAST_INSERT_ID()"];
-        $response["numero"] = $row["LAST_INSERT_ID()"];
+        $response["message"] = "Su caso ha sido registrado con el numero: ".$row["id1"];
+        $response["numero"] = $row["id1"];
         echo json_encode($response);
         
     } else {

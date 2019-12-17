@@ -13,6 +13,7 @@
 
     <!-- Bootstrap core CSS -->
 <link href="../../assets/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
 
 <meta name="theme-color" content="#563d7c">
 
@@ -43,57 +44,67 @@
     <div class="row">
             <div class="col-sm-3">
                 <!-- form user info -->
-                <div v-if="editarproveedoractivo" class="card">
+                <div id="ver_editar" style="display:none" class="card">
                     <div class="card-header">
                         <h5 class="mb-0">Editar proveedor</h5>
                     </div>
                     <div class="card-body">
-                        <form class="form" role="form" @submit.prevent="guardar_proveedor(dato)" autocomplete="off">
+                        <form class="form" id="form_actualizar" role="form" onsubmit="event.preventDefault(); return actualizar_proveedores();" autocomplete="off">
                             <div class="container">
-                                <div class="form-group">
-                                    <input class="form-control form-control-sm" name="nit" type="text" placeholder="NIT">
+                            <div style="display:none" class="form-group">
+                                    <input class="form-control form-control-sm" name="id1" type="text" placeholder="NIT">
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control form-control-sm" name="nombre" type="text" placeholder="Nombre">
+                                    <input class="form-control form-control-sm" required name="nit1" type="text" placeholder="NIT">
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control form-control-sm" name="direccion" type="text" placeholder="Dirección">
+                                    <input class="form-control form-control-sm" required name="nombre1" type="text" placeholder="Nombre">
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control form-control-sm" name="telefono" type="text" placeholder="Teléfono">
+                                    <input class="form-control form-control-sm" required name="direccion1" type="text" placeholder="Dirección">
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control form-control-sm" name="email" type="text" placeholder="Email">
+                                    <input class="form-control form-control-sm" required name="telefono1" type="text" placeholder="Teléfono">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control form-control-sm" required name="email1" type="text" placeholder="Email">
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control form-control-sm" name="state1" id="">
+                                        <option value="">Estado</option>
+                                        <option value="1">ACTIVO</option>
+                                        <option value="0">INACTIVO</option>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <button class="btn btn-success" type="submit">guardar</button>
-                                    <button class="btn btn-primary" type="button" @click="NuevoProveedor()">Nuevo</button>
+                                    <button class="btn btn-primary" type="button" onclick="ver_guardar()">Nuevo</button>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
-                <div v-else class="card">
+                <div id="ver_guardar" class="card">
                     <div class="card-header">
                         <h5 class="mb-0">Crear proveedor</h5>
                     </div>
                     <div class="card-body">
-                        <form class="form" role="form" methods="POST" onsubmit="event.preventDefault(); return guardar_proveedores();" autocomplete="off">
+                        <form class="form" id="form_guardar" role="form" methods="POST" onsubmit="event.preventDefault(); return guardar_proveedores();" autocomplete="off">
                             <div class="container">
                                 <div class="form-group">
-                                    <input ref="nit" class="form-control form-control-sm" name="nit1" type="text" placeholder="NIT">
+                                    <input ref="nit" class="form-control form-control-sm" required name="nit" type="text" placeholder="NIT">
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control form-control-sm" name="nombre1" type="text" placeholder="Nombre">
+                                    <input class="form-control form-control-sm" required name="nombre" type="text" placeholder="Nombre">
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control form-control-sm" name="direccion1" type="text" placeholder="Dirección">
+                                    <input class="form-control form-control-sm" required name="direccion" type="text" placeholder="Dirección">
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control form-control-sm" name="telefono1" type="text" placeholder="Teléfono">
+                                    <input class="form-control form-control-sm" required name="telefono" type="text" placeholder="Teléfono">
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control form-control-sm" name="email1" type="text" placeholder="Email">
+                                    <input class="form-control form-control-sm" required name="email" type="text" placeholder="Email">
                                 </div>
                                 <div class="form-group">
                                     <button class="btn btn-primary" type="submit">Agregar</button>
@@ -110,29 +121,31 @@
                     <div class="card-header">
                         <h5 class="mb-0">Proveedores</h5>
                     </div>
-                    <div class="card-body">
-                        <table class="table table-responsive-sm">
+                    <div class="card-body table-responsive-sm">
+                        <table class="table" id="example" style="width:100%">
                             <thead class="thead-light">
                                 <tr>
-                                <th scope="col">NIT</th>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">Dirección</th>
-                                <th scope="col">Teléfono</th>
-                                <th scope="col">Email</th>
-                                <th style="width:10px" scope="col"></th>
-                                <th style="width:10px" scope="col"></th>
+                                    <th style="display:none" scope="col">NIT</th>
+                                    <th scope="col">NIT</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Dirección</th>
+                                    <th scope="col">Teléfono</th>
+                                    <th scope="col">Email</th>
+                                    <th style="display:none" scope="col">Estado</th>
+                                    <th style="width:10px" scope="col"></th>
+                                    <th style="width:10px" scope="col"></th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr v-for="(item, index) in datas" :key="index">
+                            <tbody id="tbodytable">
+                                <!-- <tr>
                                     <td>{{item.nit}}</td>
                                     <td>{{item.nombre}}</td>
                                     <td>{{item.direccion}}</td>
                                     <td>{{item.telefono}}</td>
                                     <td>{{item.email}}</td>
-                                    <td><button class="btn btn-warning btn-sm" @click="editarproveedor(item)" >Editar</button></td>
-                                    <td><button class="btn btn-danger btn-sm" @click="eliminarproveedor(item, index)" >x</button></td>
-                                </tr>
+                                    <td class="editar"><button class="btn btn-warning btn-sm" onclick="ver_editar()" >Editar</button></td>
+                                    <td ><button class="btn btn-danger btn-sm">x</button></td>
+                                </tr> -->
                             </tbody>
                         </table>
                     </div>
@@ -143,24 +156,29 @@
   </div>
 </main>
 <script src="../../assets/js/jquery.slim.min.js" crossorigin="anonymous"></script>
-      <script>window.jQuery || document.write('<script src="../../assets/js/jquery.slim.min.js"><\/script>')</script><script src="../../assets/js/bootstrap.bundle.min.js" integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/jquery.slim.min.js"><\/script>')</script>
+    <script src="../../assets/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="/inventario/assets/js/bootstrap-notify.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 <script>
 $(function() {
+        ShowProveedor()
         console.log( "index!" );
   });
   function guardar_proveedores() {
-    //   var values = { 
-    //       id: $('#usuario').val(),
-    //       pass: $('#password').val()
-    //   };
       $.ajax({
         type : 'POST',
-        data: values,
-        url: 'inventario/php/proveedor/guardar.php',
+        data: $("#form_guardar").serialize(),
+        url: '/inventario/php/proveedor/guardar.php',
         success: function(respuesta) {
           let obj = JSON.parse(respuesta)
           if (obj.success) {
-            
+            notificacion("El proveedor ha sido guardado exitosamente.", "success")
+            limpiar_form()
+            ShowProveedor()
+            $("input[name*='nit']").focus()
           }else{
             alert('Datos invalidos para el acceso')
           }
@@ -170,6 +188,108 @@ $(function() {
         }
       });
       
+    }
+
+    function actualizar_proveedores() {
+      $.ajax({
+        type : 'POST',
+        data: $("#form_actualizar").serialize(),
+        url: '/inventario/php/proveedor/actualizar.php',
+        success: function(respuesta) {
+          let obj = JSON.parse(respuesta)
+          if (obj.success) {
+            notificacion("El proveedor ha sido actualizado exitosamente.", "success")
+            //limpiar_form()
+            ShowProveedor()
+            $("input[name*='nit1']").focus()
+          }else{
+            alert('Datos invalidos para el acceso')
+          }
+        },
+        error: function() {
+          console.log("No se ha podido obtener la información");
+        }
+      });
+      
+    }
+
+    function ShowProveedor() {
+        let values = { 
+            cod: "tipo"
+        }; 
+        $.ajax({
+        type : 'POST',
+        data: values,
+        url: '/inventario/php/proveedor/sel_proveedor.php',
+        beforeSend: function() {
+            //$(".loader").css("display", "inline-block")
+        },
+        success: function(respuesta) {
+        //$(".loader").css("display", "none")
+        let obj = JSON.parse(respuesta)
+        $("#example").dataTable().fnDestroy();
+        let fila = ''
+        $.each(obj.resultado, function( index, val ) {
+            fila += '<tr>'+
+                        '<td style="display:none">'+val.id+'</td>'+
+                        '<td>'+val.nit+'</td>'+
+                        '<td>'+val.nombre+'</td>'+
+                        '<td>'+val.direccion+'</td>'+
+                        '<td>'+val.telefono+'</td>'+
+                        '<td>'+val.email+'</td>'+
+                        '<td style="display:none">'+val.state+'</td>'+
+                        '<td>'+val.fecha+'</td>'+
+                        '<td class="editar"><button class="btn btn-warning btn-sm" onclick="ver_editar()" >Editar</button></td>'+
+                    '</tr>'
+        });
+        $("#tbodytable").html(fila)
+        $('#example').DataTable({
+            "ordering": false
+        });
+
+        $(".editar").click(function() {
+            var valores=[];
+ 
+            // Obtenemos todos los valores contenidos en los <td> de la fila
+            // seleccionada
+            $(this).parents("tr").find("td").each(function(){
+                valores.push($(this).html());
+            });
+            $("input[name*='id1']").val(valores[0])
+            $("input[name*='nit1']").val(valores[1])
+            $("input[name*='nombre1']").val(valores[2])
+            $("input[name*='direccion1']").val(valores[3])
+            $("input[name*='telefono1']").val(valores[4])
+            $("input[name*='email1']").val(valores[5])
+            $("select[name*='state1']").val(valores[6])
+        })
+            //$('#example').DataTable().ajax.reload();
+        },
+        error: function() {
+        //$(".loader").css("display", "")
+        console.log("No se ha podido obtener la información");
+        }
+    });
+    
+  }
+
+    function limpiar_form() {
+        $("input[name*='nit']").val("")
+        $("input[name*='nombre']").val("")
+        $("input[name*='direccion']").val("")
+        $("input[name*='telefono']").val("")
+        $("input[name*='email']").val("")
+    }
+
+    function ver_guardar() {
+        $("#ver_guardar").css("display", "block")
+        $("#ver_editar").css("display", "none")
+    }
+
+    function ver_editar() {
+        $(".editar").click()
+        $("#ver_editar").css("display", "block")
+        $("#ver_guardar").css("display", "none")
     }
 </script>
 </body>
