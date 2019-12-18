@@ -42,42 +42,60 @@
   <div class="py-5 bg-white rounded shadow-sm">
     <div class="container">
     <div class="row">
-            <div class="col-sm-3">
+    <div class="mx-auto col-sm-12">
                 <!-- form user info -->
                 <div id="ver_editar" style="display:none" class="card">
                     <div class="card-header">
-                        <h5 class="mb-0">Editar proveedor</h5>
+                        <h5 class="mb-0">Editar producto</h5>
                     </div>
                     <div class="card-body">
-                        <form class="form" id="form_actualizar" role="form" onsubmit="event.preventDefault(); return actualizar_proveedores();" autocomplete="off">
+                        <form class="form" role="form" id="form_actualizar" role="form" onsubmit="event.preventDefault(); return actualizar_productos();" autocomplete="off">
                             <div class="container">
-                            <div style="display:none" class="form-group">
-                                    <input class="form-control form-control-sm" name="id1" type="text" placeholder="NIT">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <input maxlength="255" ref="nombre" class="form-control form-control-sm" name="nombre" type="text" placeholder="Nombre">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <input maxlength="20" class="form-control form-control-sm" name="vl_costo" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" type="text" placeholder="Valor de costo">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <input class="form-control form-control-sm" name="iva" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" v-int type="text" placeholder="IVA">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <input class="form-control form-control-sm disabled" name="" disabled type="text" placeholder="Valor IVA">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <input class="form-control form-control-sm" name="vl_venta" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" type="text" placeholder="Valor de venta">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <select ref="select" class="form-control form-control-sm" name="id_categoria">
+                                                <option value="">Seleccione el Proveedor</option>
+                                                <option value="1">{{item.nombre}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <select ref="select" class="form-control form-control-sm" name="id_proveedor">
+                                                <option value="">Seleccione el Proveedor</option>
+                                                <option value="1">{{item.nombre}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control form-control-sm" required name="nit1" type="text" placeholder="NIT">
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control form-control-sm" required name="nombre1" type="text" placeholder="Nombre">
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control form-control-sm" required name="direccion1" type="text" placeholder="Dirección">
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control form-control-sm" required name="telefono1" type="text" placeholder="Teléfono">
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control form-control-sm" required name="email1" type="text" placeholder="Email">
-                                </div>
-                                <div class="form-group">
-                                    <select class="form-control form-control-sm" name="state1" id="">
-                                        <option value="">Estado</option>
-                                        <option value="1">ACTIVO</option>
-                                        <option value="0">INACTIVO</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <button class="btn btn-success" type="submit">guardar</button>
+                                    <button class="btn btn-success" type="submit">Guardar</button>
                                     <button class="btn btn-primary" type="button" onclick="ver_guardar()">Nuevo</button>
                                 </div>
                             </div>
@@ -86,29 +104,57 @@
                 </div>
                 <div id="ver_guardar" class="card">
                     <div class="card-header">
-                        <h5 class="mb-0">Crear proveedor</h5>
+                        <h5 class="mb-0">Crear producto</h5>
                     </div>
                     <div class="card-body">
-                        <form class="form" id="form_guardar" role="form" methods="POST" onsubmit="event.preventDefault(); return guardar_proveedores();" autocomplete="off">
+                    <form class="form" role="form" id="form_guardar" role="form" onsubmit="event.preventDefault(); return guardar_productos();" autocomplete="off">
                             <div class="container">
-                                <div class="form-group">
-                                    <input ref="nit" class="form-control form-control-sm" required name="nit" type="text" placeholder="NIT">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <input maxlength="255" ref="nombre" class="form-control form-control-sm" required name="nombre" type="text" placeholder="Nombre">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <input maxlength="20" class="form-control form-control-sm" required name="vl_costo" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" type="text" placeholder="Valor de costo">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <input class="form-control form-control-sm" required name="iva" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" v-int type="text" placeholder="IVA">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <input class="form-control form-control-sm disabled" name="" disabled type="text" placeholder="Valor IVA">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <input class="form-control form-control-sm" required name="vl_venta" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" type="text" placeholder="Valor de venta">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <select ref="select" class="form-control form-control-sm" name="id_categoria">
+                                                <option value="">Seleccione el Proveedor</option>
+                                                <option value="1">{{item.nombre}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <select ref="select" class="form-control form-control-sm" name="id_proveedor">
+                                                <option value="">Seleccione el Proveedor</option>
+                                                <option value="1">{{item.nombre}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control form-control-sm" required name="nombre" type="text" placeholder="Nombre">
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control form-control-sm" required name="direccion" type="text" placeholder="Dirección">
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control form-control-sm" required name="telefono" type="text" placeholder="Teléfono">
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control form-control-sm" required name="email" type="text" placeholder="Email">
-                                </div>
-                                <div class="form-group">
-                                    <button class="btn btn-primary" type="submit">Agregar</button>
-                                    <button class="btn btn-danger" type="button" @click="limpiarproveedores()">Limpiar</button>
+                                    <button class="btn btn-primary" type="submit">Guardar</button>
+                                    <button class="btn btn-danger" type="button" onclick="ver_guardar()">Limpiar</button>
                                 </div>
                             </div>
                         </form>
@@ -116,10 +162,10 @@
                 </div>
                 <!-- /form user info -->
             </div>
-            <div class="col-sm-9">
+            <div class="col-sm-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="mb-0">Proveedores</h5>
+                        <h5 class="mb-0">productos</h5>
                     </div>
                     <div class="card-body table-responsive-sm">
                         <table class="table" id="example" style="width:100%">
@@ -164,20 +210,20 @@
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 <script>
 $(function() {
-        ShowProveedor()
+        Showproducto()
         console.log( "index!" );
   });
-  function guardar_proveedores() {
+  function guardar_productos() {
       $.ajax({
         type : 'POST',
         data: $("#form_guardar").serialize(),
-        url: '/inventario/php/proveedor/guardar.php',
+        url: '/inventario/php/producto/guardar.php',
         success: function(respuesta) {
           let obj = JSON.parse(respuesta)
           if (obj.success) {
-            notificacion("El proveedor ha sido guardado exitosamente.", "success")
+            notificacion("El producto ha sido guardado exitosamente.", "success")
             limpiar_form()
-            ShowProveedor()
+            Showproducto()
             $("input[name*='nit']").focus()
           }else{
             alert('Datos invalidos para el acceso')
@@ -190,17 +236,17 @@ $(function() {
       
     }
 
-    function actualizar_proveedores() {
+    function actualizar_productos() {
       $.ajax({
         type : 'POST',
         data: $("#form_actualizar").serialize(),
-        url: '/inventario/php/proveedor/actualizar.php',
+        url: '/inventario/php/producto/actualizar.php',
         success: function(respuesta) {
           let obj = JSON.parse(respuesta)
           if (obj.success) {
-            notificacion("El proveedor ha sido actualizado exitosamente.", "success")
+            notificacion("El producto ha sido actualizado exitosamente.", "success")
             //limpiar_form()
-            ShowProveedor()
+            Showproducto()
             $("input[name*='nit1']").focus()
           }else{
             alert('Datos invalidos para el acceso')
@@ -213,14 +259,14 @@ $(function() {
       
     }
 
-    function ShowProveedor() {
+    function Showproducto() {
         let values = { 
             cod: "tipo"
         }; 
         $.ajax({
         type : 'POST',
         data: values,
-        url: '/inventario/php/proveedor/seleccionar.php',
+        url: '/inventario/php/producto/sel_producto.php',
         beforeSend: function() {
             //$(".loader").css("display", "inline-block")
         },
