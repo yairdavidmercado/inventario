@@ -1,6 +1,6 @@
 
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -49,49 +49,66 @@
                         <h5 class="mb-0">Editar producto</h5>
                     </div>
                     <div class="card-body">
-                        <form class="form" role="form" id="form_actualizar" role="form" onsubmit="event.preventDefault(); return actualizar_productos();" autocomplete="off">
+                        <form name="editar_producto" class="form" role="form" id="form_actualizar" role="form" onsubmit="event.preventDefault(); return actualizar_productos();" autocomplete="off">
                             <div class="container">
                                 <div class="row">
+                                    <div style="display:none" class="col-sm-12">
+                                        <div class="form-group">
+                                            <input maxlength="255" ref="id" class="form-control form-control-sm" name="id1" type="text" placeholder="id">
+                                        </div>
+                                    </div>
                                     <div class="col-sm-12">
                                         <div class="form-group">
-                                            <input maxlength="255" ref="nombre" class="form-control form-control-sm" name="nombre" type="text" placeholder="Nombre">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <input maxlength="20" class="form-control form-control-sm" name="vl_costo" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" type="text" placeholder="Valor de costo">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <div class="form-group">
-                                            <input class="form-control form-control-sm" name="iva" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" v-int type="text" placeholder="IVA">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <div class="form-group">
-                                            <input class="form-control form-control-sm disabled" name="" disabled type="text" placeholder="Valor IVA">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <input class="form-control form-control-sm" name="vl_venta" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" type="text" placeholder="Valor de venta">
+                                            <input maxlength="255" ref="nombre" class="form-control form-control-sm" name="nombre1" type="text" placeholder="Nombre">
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <select ref="select" class="form-control form-control-sm" name="id_categoria">
-                                                <option value="">Seleccione el Proveedor</option>
-                                                <option value="1">{{item.nombre}}</option>
+                                            <input maxlength="20" class="form-control form-control-sm" name="vl_costo1" onKeyUp="calcular()" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" type="text" placeholder="Valor de costo">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <input class="form-control form-control-sm" name="iva1" onKeyUp="calcular()" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" v-int type="text" placeholder="IVA">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <input class="form-control form-control-sm" disabled name="valor_iva1" type="text" placeholder="Valor IVA">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <input class="form-control form-control-sm" disabled name="total_costo1" type="text" placeholder="Total costo">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <input class="form-control form-control-sm" name="vl_venta1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" type="text" placeholder="Valor de venta">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <select ref="select" required class="form-control form-control-sm id_categoria" name="id_categoria1">
+                                                <option value="">Seleccione el categoría</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <select ref="select" class="form-control form-control-sm" name="id_proveedor">
-                                                <option value="">Seleccione el Proveedor</option>
-                                                <option value="1">{{item.nombre}}</option>
+                                            <select ref="select" required class="form-control form-control-sm id_proveedor" name="id_proveedor1">
+                                                <option value="">Seleccione el proveedor</option>
                                             </select>
                                         </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <select class="form-control form-control-sm" name="state1" id="">
+                                            <option value="">Estado</option>
+                                            <option value="1">ACTIVO</option>
+                                            <option value="0">INACTIVO</option>
+                                        </select>
+                                    </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -107,7 +124,7 @@
                         <h5 class="mb-0">Crear producto</h5>
                     </div>
                     <div class="card-body">
-                    <form class="form" role="form" id="form_guardar" role="form" onsubmit="event.preventDefault(); return guardar_productos();" autocomplete="off">
+                    <form name="crear_producto" class="form" role="form" id="form_guardar" role="form" onsubmit="event.preventDefault(); return guardar_productos();" autocomplete="off">
                             <div class="container">
                                 <div class="row">
                                     <div class="col-sm-12">
@@ -115,39 +132,42 @@
                                             <input maxlength="255" ref="nombre" class="form-control form-control-sm" required name="nombre" type="text" placeholder="Nombre">
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <div class="form-group">
-                                            <input maxlength="20" class="form-control form-control-sm" required name="vl_costo" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" type="text" placeholder="Valor de costo">
+                                            <input maxlength="20" class="form-control form-control-sm" onKeyUp="calcular()" required name="vl_costo" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" type="text" placeholder="Valor de costo">
                                         </div>
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
-                                            <input class="form-control form-control-sm" required name="iva" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" v-int type="text" placeholder="IVA">
+                                            <input class="form-control form-control-sm" onKeyUp="calcular()" required name="iva" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" v-int type="text" placeholder="IVA">
                                         </div>
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
-                                            <input class="form-control form-control-sm disabled" name="" disabled type="text" placeholder="Valor IVA">
+                                            <input class="form-control form-control-sm disabled" name="valor_iva" disabled type="text" placeholder="Valor IVA">
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <input class="form-control form-control-sm disabled" name="total_costo" disabled type="text" placeholder="Total costo">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <input class="form-control form-control-sm" required name="vl_venta" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" type="text" placeholder="Valor de venta">
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <select ref="select" class="form-control form-control-sm" name="id_categoria">
-                                                <option value="">Seleccione el Proveedor</option>
-                                                <option value="1">{{item.nombre}}</option>
+                                            <select ref="select" required class="form-control form-control-sm id_categoria" name="id_categoria">
+                                                <option value="">Seleccione el categoría</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <select ref="select" class="form-control form-control-sm" name="id_proveedor">
-                                                <option value="">Seleccione el Proveedor</option>
-                                                <option value="1">{{item.nombre}}</option>
+                                            <select ref="select" required class="form-control form-control-sm id_proveedor" name="id_proveedor">
+                                                <option value="">Seleccione el proveedor</option>
                                             </select>
                                         </div>
                                     </div>
@@ -162,23 +182,29 @@
                 </div>
                 <!-- /form user info -->
             </div>
-            <div class="col-sm-12">
+            <div class="col-sm-12 py-4">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="mb-0">productos</h5>
+                        <h5 class="mb-0">Productos</h5>
                     </div>
                     <div class="card-body table-responsive-sm">
-                        <table class="table" id="example" style="width:100%">
+                        <table class="table" id="example" style="width:100%;font-size:11px">
                             <thead class="thead-light">
                                 <tr>
-                                    <th style="display:none" scope="col">NIT</th>
-                                    <th scope="col">NIT</th>
+                                    <th style="display:none" scope="col">Id</th>
                                     <th scope="col">Nombre</th>
-                                    <th scope="col">Dirección</th>
-                                    <th scope="col">Teléfono</th>
-                                    <th scope="col">Email</th>
+                                    <th scope="col">Valor costo</th>
+                                    <th scope="col">Valor Venta</th>
+                                    <th scope="col">IVA</th>
+                                    <th scope="col">Total costo</th>
+                                    <th scope="col">Categoría</th>
+                                    <th scope="col">Proveedor</th>
+                                    <th scope="col">Fecha</th>
+                                    <th style="display:none" scope="col">vl IVA</th>
+                                    <th style="display:none" scope="col">id Categoría</th>
+                                    <th style="display:none" scope="col">id Proveedor</th>
+                                    <th style="display:none" scope="col">Perfil</th>
                                     <th style="display:none" scope="col">Estado</th>
-                                    <th style="width:10px" scope="col"></th>
                                     <th style="width:10px" scope="col"></th>
                                 </tr>
                             </thead>
@@ -211,6 +237,8 @@
 <script>
 $(function() {
         Showproducto()
+        buscar_categorias()
+        buscar_proveedores()
         console.log( "index!" );
   });
   function guardar_productos() {
@@ -224,7 +252,7 @@ $(function() {
             notificacion("El producto ha sido guardado exitosamente.", "success")
             limpiar_form()
             Showproducto()
-            $("input[name*='nit']").focus()
+            $("input[name*='nombre']").focus()
           }else{
             alert('Datos invalidos para el acceso')
           }
@@ -266,7 +294,7 @@ $(function() {
         $.ajax({
         type : 'POST',
         data: values,
-        url: '/inventario/php/producto/sel_producto.php',
+        url: '/inventario/php/producto/seleccionar.php',
         beforeSend: function() {
             //$(".loader").css("display", "inline-block")
         },
@@ -278,13 +306,19 @@ $(function() {
         $.each(obj.resultado, function( index, val ) {
             fila += '<tr>'+
                         '<td style="display:none">'+val.id+'</td>'+
-                        '<td>'+val.nit+'</td>'+
                         '<td>'+val.nombre+'</td>'+
-                        '<td>'+val.direccion+'</td>'+
-                        '<td>'+val.telefono+'</td>'+
-                        '<td>'+val.email+'</td>'+
-                        '<td style="display:none">'+val.state+'</td>'+
+                        '<td>'+parseInt(val.vl_costo).toFixed(0)+'</td>'+
+                        '<td>'+parseInt(val.vl_venta).toFixed(0)+'</td>'+
+                        '<td>'+parseInt(val.total_iva).toFixed(0)+'</td>'+
+                        '<td>'+parseInt(val.total_costo).toFixed(0)+'</td>'+
+                        '<td>'+val.categoria+'</td>'+
+                        '<td>'+val.proveedor+'</td>'+
                         '<td>'+val.fecha+'</td>'+
+                        '<td style="display:none">'+val.iva+'</td>'+
+                        '<td style="display:none">'+val.id_categoria+'</td>'+
+                        '<td style="display:none">'+val.id_proveedor+'</td>'+
+                        '<td style="display:none">'+val.perfil+'</td>'+
+                        '<td style="display:none">'+val.state+'</td>'+
                         '<td class="editar"><button class="btn btn-warning btn-sm" onclick="ver_editar()" >Editar</button></td>'+
                     '</tr>'
         });
@@ -301,13 +335,17 @@ $(function() {
             $(this).parents("tr").find("td").each(function(){
                 valores.push($(this).html());
             });
+            $("input[name*='nombre1']").focus()
             $("input[name*='id1']").val(valores[0])
-            $("input[name*='nit1']").val(valores[1])
-            $("input[name*='nombre1']").val(valores[2])
-            $("input[name*='direccion1']").val(valores[3])
-            $("input[name*='telefono1']").val(valores[4])
-            $("input[name*='email1']").val(valores[5])
-            $("select[name*='state1']").val(valores[6])
+            $("input[name*='nombre1']").val(valores[1])
+            $("input[name*='vl_costo1']").val(valores[2])
+            $("input[name*='vl_venta1']").val(valores[3])
+            $("input[name*='iva1']").val(valores[9])
+            $("select[name*='id_categoria1']").val(valores[10])
+            $("select[name*='id_proveedor1']").val(valores[11])
+            $("select[name*='perfil1']").val(valores[12])
+            $("select[name*='state1']").val(valores[13])
+            calcular()
         })
             //$('#example').DataTable().ajax.reload();
         },
@@ -320,11 +358,14 @@ $(function() {
   }
 
     function limpiar_form() {
-        $("input[name*='nit']").val("")
-        $("input[name*='nombre']").val("")
-        $("input[name*='direccion']").val("")
-        $("input[name*='telefono']").val("")
-        $("input[name*='email']").val("")
+            $("input[name*='nombre1']").val("")
+            $("input[name*='vl_costo1']").val("")
+            $("input[name*='vl_venta1']").val("")
+            $("input[name*='iva1']").val("19")
+            $("select[name*='id_categoria1']").val("")
+            $("select[name*='id_proveedor1']").val("")
+            $("select[name*='perfil1']").val("")
+            $("select[name*='state1']").val("")
     }
 
     function ver_guardar() {
@@ -337,6 +378,34 @@ $(function() {
         $("#ver_editar").css("display", "block")
         $("#ver_guardar").css("display", "none")
     }
+
+    function calcular() {
+        let vl_costo = document.crear_producto.vl_costo.value;
+        let iva = document.crear_producto.iva.value;
+
+        let vl_costo1 = document.editar_producto.vl_costo1.value;
+        let iva1 = document.editar_producto.iva1.value;
+        try{
+            //Calculamos el número escrito:
+            vl_costo = (isNaN(parseInt(vl_costo)))? 0 : parseInt(vl_costo);
+            iva = (isNaN(parseInt(iva)))? 0 : parseInt(iva);
+            document.crear_producto.valor_iva.value = ((vl_costo*iva)/100).toFixed(0);
+            document.crear_producto.total_costo.value = (((vl_costo*iva)/100)+vl_costo).toFixed(0);
+
+            vl_costo1 = (isNaN(parseInt(vl_costo1)))? 0 : parseInt(vl_costo1);
+            iva1 = (isNaN(parseInt(iva1)))? 0 : parseInt(iva1);
+            document.editar_producto.valor_iva1.value = ((vl_costo1*iva1)/100).toFixed(0);
+            document.editar_producto.total_costo1.value = (((vl_costo1*iva1)/100)+vl_costo1).toFixed(0);
+        }
+        //Si se produce un error no hacemos nada
+        catch(e) {}
+    }
+
+    function format_number(param) {
+       let number = new Intl.NumberFormat().format(param)
+       return number
+    }
+
 </script>
 </body>
 </html>

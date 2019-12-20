@@ -121,8 +121,8 @@
                     <div class="card-header">
                         <h5 class="mb-0">Proveedores</h5>
                     </div>
-                    <div class="card-body table-responsive-sm">
-                        <table class="table" id="example" style="width:100%">
+                    <div class="card-body table-responsive">
+                        <table class="table" id="example" style="width:100%; font-size:11px">
                             <thead class="thead-light">
                                 <tr>
                                     <th style="display:none" scope="col">NIT</th>
@@ -215,7 +215,8 @@ $(function() {
 
     function ShowProveedor() {
         let values = { 
-            cod: "tipo"
+            cod: "1",
+            state: 1,
         }; 
         $.ajax({
         type : 'POST',

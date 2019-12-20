@@ -55,6 +55,7 @@ session_start();
     </div>
   </nav>
   <script src="/inventario/assets/js/jquery.slim.min.js" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script>
   $(function() {
         console.log( "ready!" );
@@ -64,5 +65,63 @@ session_start();
 	    message: message,
         type: type,
     });
+  }
+
+  function buscar_categorias(param) {
+    let values = { 
+            cod: "2",
+            state: '1'
+        }; 
+        $.ajax({
+        type : 'POST',
+        data: values,
+        url: '/inventario/php/categoria/seleccionar.php',
+        beforeSend: function() {
+            //$(".loader").css("display", "inline-block")
+        },
+        success: function(respuesta) {
+            //$(".loader").css("display", "none")
+            let obj = JSON.parse(respuesta)
+            let fila = ''
+            $.each(obj.resultado, function( index, val ) {
+                fila += '<option value="'+val.id+'">'+val.nombre+'</option>';
+            });
+            $(".id_categoria").html('<option value="">Seleccione el categoría</option>'+fila)
+        },
+        error: function() {
+        //$(".loader").css("display", "")
+        console.log("No se ha podido obtener la información");
+        }
+    });
+    
+  }
+
+  function buscar_proveedores(param) {
+    let values = { 
+            cod: "2",
+            state: '1'
+        }; 
+        $.ajax({
+        type : 'POST',
+        data: values,
+        url: '/inventario/php/proveedor/seleccionar.php',
+        beforeSend: function() {
+            //$(".loader").css("display", "inline-block")
+        },
+        success: function(respuesta) {
+            //$(".loader").css("display", "none")
+            let obj = JSON.parse(respuesta)
+            let fila = ''
+            $.each(obj.resultado, function( index, val ) {
+                fila += '<option value="'+val.id+'">'+val.nombre+'</option>';
+            });
+            $(".id_proveedor").html('<option value="">Seleccione el proveedor</option>'+fila)
+        },
+        error: function() {
+        //$(".loader").css("display", "")
+        console.log("No se ha podido obtener la información");
+        }
+    });
+    
   }
   </script>

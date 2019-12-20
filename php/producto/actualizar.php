@@ -1,13 +1,15 @@
 <?php
 session_start(); 
 $id = $_POST["id1"];
-$nit = $_POST["nit1"];
 $nombre = $_POST["nombre1"];
-$direccion = $_POST["direccion1"];
-$telefono = $_POST["telefono1"];
-$email = $_POST["email1"];
+$vl_costo = $_POST["vl_costo1"];
+$vl_venta = $_POST["vl_venta1"];
+$iva = $_POST["iva1"];
+$id_categoria = $_POST["id_categoria1"];
+$id_proveedor = $_POST["id_proveedor1"];
 $user_id = $_SESSION["idUser"];
 $state = $_POST["state1"];
+$perfil = 1;
 
 $response = array();
 include '../../php/conexion.php';
@@ -18,7 +20,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "CALL actualizar_proveedor('".$id."','".$nit."', '".$nombre."', '".$direccion."', '".$telefono."', '".$email."', '".$user_id."','".$state."');";
+$sql = "CALL actualizar_productos(".$id.",'".$nombre."', ".$vl_costo.", ".$vl_venta.", '".$iva."', ".$id_categoria.", ".$id_proveedor.", ".$user_id.", ".$perfil.",".$state.");";
 $result = $conn->query($sql);
 
 while ($row = $result->fetch_assoc()) {
