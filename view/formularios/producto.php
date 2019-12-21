@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v3.8.6">
-    <title>Offcanvas template · Bootstrap</title>
+    <title>Inventario</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/offcanvas/">
 
@@ -124,7 +124,7 @@
                         <h5 class="mb-0">Crear producto</h5>
                     </div>
                     <div class="card-body">
-                    <form name="crear_producto" class="form" role="form" id="form_guardar" role="form" onsubmit="event.preventDefault(); return guardar_productos();" autocomplete="off">
+                        <form name="crear_producto" class="form" role="form" id="form_guardar" role="form" onsubmit="event.preventDefault(); return guardar_productos();" autocomplete="off">
                             <div class="container">
                                 <div class="row">
                                     <div class="col-sm-12">
@@ -206,6 +206,7 @@
                                     <th style="display:none" scope="col">Perfil</th>
                                     <th style="display:none" scope="col">Estado</th>
                                     <th style="width:10px" scope="col"></th>
+                                    <th style="width:10px" scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody id="tbodytable">
@@ -222,6 +223,46 @@
                         </table>
                     </div>
                 </div>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                <form id="form_existencias" class="form" role="form" role="form" onsubmit="event.preventDefault(); return guardar_existencias();" autocomplete="off">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalCenterTitle">Configurar existencias</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                                <div class="container">
+                                    <div class="row">
+                                    <div style="display:none" class="col-sm-3">
+                                            <div class="form-group">
+                                            <input maxlength="20" class="form-control form-control-sm" required name="modal_id" type="text" placeholder="Cantidad existente">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                            <input maxlength="20" class="form-control form-control-sm" disabled name="modal_nombre" type="text" placeholder="Cantidad existente">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <input maxlength="20" class="form-control form-control-sm" required name="modal_cantidad" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" type="text" placeholder="Cantidad existente">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="submit" alert() class="btn btn-primary">Guardar cambios</button>
+                        </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -241,7 +282,8 @@ $(function() {
         buscar_proveedores()
         console.log( "index!" );
   });
-  function guardar_productos() {
+
+    function guardar_productos() {
       $.ajax({
         type : 'POST',
         data: $("#form_guardar").serialize(),
@@ -253,6 +295,29 @@ $(function() {
             limpiar_form()
             Showproducto()
             $("input[name*='nombre']").focus()
+          }else{
+            alert('Datos invalidos para el acceso')
+          }
+        },
+        error: function() {
+          console.log("No se ha podido obtener la información");
+        }
+      });
+      
+    }
+
+    function guardar_existencias() {
+      $.ajax({
+        type : 'POST',
+        data: $("#form_existencias").serialize(),
+        url: '/inventario/php/producto/guardar_cantidad.php',
+        success: function(respuesta) {
+          let obj = JSON.parse(respuesta)
+          if (obj.success) {
+            notificacion("Se ha agregado una existencia al producto selenccionado.", "success")
+            Showproducto()
+            $(".close").click()
+            $("input[name*='modal_cantidad']").val("")
           }else{
             alert('Datos invalidos para el acceso')
           }
@@ -320,6 +385,7 @@ $(function() {
                         '<td style="display:none">'+val.perfil+'</td>'+
                         '<td style="display:none">'+val.state+'</td>'+
                         '<td class="editar"><button class="btn btn-warning btn-sm" onclick="ver_editar()" >Editar</button></td>'+
+                        '<td class="cantidad" ><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModalCenter" >Stock</button></td>'+
                     '</tr>'
         });
         $("#tbodytable").html(fila)
@@ -327,27 +393,39 @@ $(function() {
             "ordering": false
         });
 
-        $(".editar").click(function() {
-            var valores=[];
- 
-            // Obtenemos todos los valores contenidos en los <td> de la fila
-            // seleccionada
-            $(this).parents("tr").find("td").each(function(){
-                valores.push($(this).html());
-            });
-            $("input[name*='nombre1']").focus()
-            $("input[name*='id1']").val(valores[0])
-            $("input[name*='nombre1']").val(valores[1])
-            $("input[name*='vl_costo1']").val(valores[2])
-            $("input[name*='vl_venta1']").val(valores[3])
-            $("input[name*='iva1']").val(valores[9])
-            $("select[name*='id_categoria1']").val(valores[10])
-            $("select[name*='id_proveedor1']").val(valores[11])
-            $("select[name*='perfil1']").val(valores[12])
-            $("select[name*='state1']").val(valores[13])
-            calcular()
-        })
-            //$('#example').DataTable().ajax.reload();
+            $(".editar").click(function() {
+                var valores=[];
+    
+                // Obtenemos todos los valores contenidos en los <td> de la fila
+                // seleccionada
+                $(this).parents("tr").find("td").each(function(){
+                    valores.push($(this).html());
+                });
+                $("input[name*='nombre1']").focus()
+                $("input[name*='id1']").val(valores[0])
+                $("input[name*='nombre1']").val(valores[1])
+                $("input[name*='vl_costo1']").val(valores[2])
+                $("input[name*='vl_venta1']").val(valores[3])
+                $("input[name*='iva1']").val(valores[9])
+                $("select[name*='id_categoria1']").val(valores[10])
+                $("select[name*='id_proveedor1']").val(valores[11])
+                $("select[name*='perfil1']").val(valores[12])
+                $("select[name*='state1']").val(valores[13])
+                calcular()
+            })
+        
+            $(".cantidad").click(function() {
+                var valores=[];
+    
+                // Obtenemos todos los valores contenidos en los <td> de la fila
+                // seleccionada
+                $(this).parents("tr").find("td").each(function(){
+                    valores.push($(this).html());
+                });
+                $("input[name*='modal_id']").val(valores[0])
+                $("input[name*='modal_nombre']").val(valores[1])
+
+            })
         },
         error: function() {
         //$(".loader").css("display", "")
