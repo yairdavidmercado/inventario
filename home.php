@@ -47,7 +47,7 @@
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <button type="button" class="btn btn-sm" style="background-color: #6c63ff; color:#fff">Registrar cliente</button>
+                  <a  href="view/formularios/cliente.php" class="btn btn-sm" style="background-color: #6c63ff; color:#fff">Registrar cliente</a>
                 </div>
                 <!-- <small class="text-muted">9 mins</small> -->
               </div>
@@ -60,7 +60,7 @@
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <button type="button" class="btn btn-sm" style="background-color: #6c63ff; color:#fff">Nueva venta</button>
+                  <a  href="view/formularios/venta.php" class="btn btn-sm" style="background-color: #6c63ff; color:#fff">Nueva venta</a>
                 </div>
                 <!-- <small class="text-muted">9 mins</small> -->
               </div>

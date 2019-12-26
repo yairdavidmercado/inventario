@@ -15,10 +15,11 @@ if ($conn->connect_error) {
 $sql = "SELECT *, 
 CAST(reg_date AS DATE) as fecha, 
 ((vl_costo*(CAST(iva AS DECIMAL(5,0))))/100) as total_iva,
+IF((select sum(cantidad) FROM existencias WHERE id_producto = productos.id ) IS NULL, 0 ,(select sum(cantidad) FROM existencias WHERE id_producto = productos.id )) as cantidad,
 (vl_costo+((vl_costo*(CAST(iva AS DECIMAL(5,0))))/100)) as total_costo,
 (SELECT TRIM(nombre) FROM categorias WHERE categorias.id = productos.id_categoria) as categoria,
 (SELECT TRIM(nombre) FROM proveedors WHERE proveedors.id = productos.id_proveedor) as proveedor
-FROM productos order by id desc;";
+FROM productos WHERE productos.state = 1 order by id desc;";
 $result = $conn->query($sql);
 // output data of each row
 $response["resultado"] = array();

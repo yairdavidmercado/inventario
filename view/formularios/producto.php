@@ -199,6 +199,7 @@
                                     <th scope="col">Total costo</th>
                                     <th scope="col">Categoría</th>
                                     <th scope="col">Proveedor</th>
+                                    <th scope="col">Cantidad</th>
                                     <th scope="col">Fecha</th>
                                     <th style="display:none" scope="col">vl IVA</th>
                                     <th style="display:none" scope="col">id Categoría</th>
@@ -378,6 +379,7 @@ $(function() {
                         '<td>'+parseInt(val.total_costo).toFixed(0)+'</td>'+
                         '<td>'+val.categoria+'</td>'+
                         '<td>'+val.proveedor+'</td>'+
+                        '<td>'+val.cantidad+'</td>'+
                         '<td>'+val.fecha+'</td>'+
                         '<td style="display:none">'+val.iva+'</td>'+
                         '<td style="display:none">'+val.id_categoria+'</td>'+
@@ -406,11 +408,11 @@ $(function() {
                 $("input[name*='nombre1']").val(valores[1])
                 $("input[name*='vl_costo1']").val(valores[2])
                 $("input[name*='vl_venta1']").val(valores[3])
-                $("input[name*='iva1']").val(valores[9])
-                $("select[name*='id_categoria1']").val(valores[10])
-                $("select[name*='id_proveedor1']").val(valores[11])
-                $("select[name*='perfil1']").val(valores[12])
-                $("select[name*='state1']").val(valores[13])
+                $("input[name*='iva1']").val(valores[10])
+                $("select[name*='id_categoria1']").val(valores[11])
+                $("select[name*='id_proveedor1']").val(valores[12])
+                $("select[name*='perfil1']").val(valores[13])
+                $("select[name*='state1']").val(valores[14])
                 calcular()
             })
         
