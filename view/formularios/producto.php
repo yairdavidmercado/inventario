@@ -355,7 +355,8 @@ $(function() {
 
     function Showproducto() {
         let values = { 
-            cod: "tipo"
+            cod: "1",
+            state: "1"
         }; 
         $.ajax({
         type : 'POST',

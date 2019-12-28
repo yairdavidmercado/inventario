@@ -35,7 +35,7 @@ if ($cod == '1') {
     }
     //termina cod 1
 }elseif ($cod == '2') {
-    $sql = "SELECT * FROM proveedors WHERE state = $parametro2 order by id desc;";
+    $sql = "SELECT * FROM clientes WHERE state = $parametro2 order by id desc;";
     $result = $conn->query($sql);
     // output data of each row
     $response["resultado"] = array();
