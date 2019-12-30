@@ -356,7 +356,7 @@ $(function() {
     function Showproducto() {
         let values = { 
             cod: "1",
-            state: "1"
+            parametro1: "1"
         }; 
         $.ajax({
         type : 'POST',
