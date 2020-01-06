@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v3.8.6">
-    <title>Offcanvas template · Bootstrap</title>
+    <title>Inventario</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/offcanvas/">
 
@@ -203,7 +203,7 @@
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <button type="button" class="btn btn-sm" style="background-color: #6c63ff; color:#fff">Añadir usuario</button>
+                <a  href="view/formularios/usuario.php" class="btn btn-sm" style="background-color: #6c63ff; color:#fff">Añadir usuario</a>
                 </div>
                 <!-- <small class="text-muted">9 mins</small> -->
               </div>
@@ -255,7 +255,7 @@
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <button type="button" class="btn btn-sm" style="background-color: #6c63ff; color:#fff">Caja general</button>
+                <a  href="view/formularios/caja.php" class="btn btn-sm" style="background-color: #6c63ff; color:#fff">Caja general</a>
                 </div>
                 <!-- <small class="text-muted">9 mins</small> -->
               </div>

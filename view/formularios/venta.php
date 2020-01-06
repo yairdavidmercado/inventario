@@ -57,7 +57,7 @@
                                             <div class="form-group col-sm-6">
                                                 <label style="font-size:14px" for="">Producto</label>
                                                 <br>
-                                                <select onchange="productos_detalle(this.value)" required class="form-control select2-single id_producto" name="id_producto">
+                                                <select onchange="productos_detalle(this.value)" required class="form-control select2-single id_producto" name="id_producto" id="id_producto">
                                                     <option value="">Seleccione el producto</option>
                                                 </select>
                                             </div>
@@ -67,7 +67,7 @@
                                             </div>
                                             <div class="form-group col-sm-2">
                                                 <label style="font-size:14px" for="">Cantidad</label>
-                                                <input class="form-control form-control-sm" required name="cantidad" type="text" placeholder="Cantidad">
+                                                <input class="form-control form-control-sm" required name="cantidad" id="cantidad" type="text" placeholder="Cantidad">
                                             </div>    
                                             <div class="form-group col-sm-1" style="margin-top:30px">
                                                 <button class="btn btn-primary float-right btn-sm" type="submit"><i class="fa fa-floppy-o" style="font-size:18px"></i></button>
@@ -106,7 +106,7 @@
                                     <label class="custom-control-label" for="debit">Efectivo</label>
                                 </div>
                                 <div class="custom-control custom-radio custom-control-inline">
-                                    <input id="bank" value="banco" onclick="datos_clientes('0')" name="tipo_venta" type="radio" class="custom-control-input" required="">
+                                    <input id="bank" value="tarjeta" onclick="datos_clientes('0')" name="tipo_venta" type="radio" class="custom-control-input" required="">
                                     <label class="custom-control-label" for="bank">Tarjeta</label>
                                 </div>
                                 <div class="custom-control custom-radio custom-control-inline">
@@ -116,8 +116,11 @@
                             </div>
                             <div id="content_cliente">
                             </div>
-                            <div class="col-sm-12">
-                                <button type="submit" class="btn btn-primary float-right">Guardar</button>
+                            <div id="btn_guardar" class="col-sm-12">
+                                <button type="submit" class="btn btn-success float-right">Facturar</button>
+                            </div>
+                            <div style="display:none" id="btn_guardar_credito" class="col-sm-12">
+                                <button type="submit" class="btn btn-success float-right">Facturar</button>
                             </div>
                         </form>
                     </div>
@@ -190,6 +193,11 @@ $(function() {
         console.log( "index!" );
   });
   function guardar_detalle_factura() {
+        productos_detalle($("#id_producto").val())
+        if($("#cantidad").val() > $("#existencias").text()){
+            notificacion("la cantidad establecida no puede superar a la existencia actual del producto")
+            return false
+      }
       $.ajax({
         type : 'POST',
         data: $("#form_detalle_factura").serialize(),
@@ -263,12 +271,12 @@ $(function() {
             total_iva += (parseInt(val.iva)*parseInt(val.cantidad)*(val.vl_venta))/100
             sub_total += parseInt(val.cantidad)*(val.vl_venta)-((parseInt(val.iva)*parseInt(val.cantidad)*(val.vl_venta))/100)
             fila += '<tr>'+
+                        '<td class="id_productos" style="display:none" >'+val.id+'</td>'+
                         '<td>'+val.id_producto+'</td>'+
                         '<td>'+val.nombre_producto+'</td>'+
                         '<td>'+val.cantidad+'</td>'+
                         '<td>'+val.vl_venta+'</td>'+
                         '<td>'+parseFloat((parseInt(val.iva)*parseInt(val.cantidad)*(val.vl_venta))/100).toFixed(2)+'</td>'+
-                        '<td style="display:none">'+val.state+'</td>'+
                         '<td>'+parseFloat(parseInt(val.cantidad)*(val.vl_venta)-((parseInt(val.iva)*parseInt(val.cantidad)*(val.vl_venta))/100)).toFixed(2)+'</td>'+
                         '<td>'+parseFloat(parseInt(val.cantidad)*(val.vl_venta)).toFixed(2)+'</td>'+
                         //'<td class="editar"><a style="cursor:pointer" onclick="ver_editar()" ><i style="font-size:11px" class="fa fa-pencil-square-o"></i></a></td>'+
@@ -308,6 +316,46 @@ $(function() {
     });
     
   }
+
+  function guardar_factura() {
+    let productos = []
+    $(".id_productos").each(function(){
+        productos.push($(this).text())
+    });
+    let values = ''
+    if ($("input[name=tipo_venta]:checked").val() == 'credito') {
+            values = $("#form_factura").serialize() + "&iva_factu="+$("input[name*='iva']").val()+"&subtotal_factu="+$("input[name*='subtotal']").val()+"&valor_factu="+$("input[name*='total_pagar']").val()+"&id_productos="+productos.toString()
+            console.log(values)
+        }else{
+            values = $("#form_factura").serialize() + "&iva_factu="+$("input[name*='iva']").val()+"&subtotal_factu="+$("input[name*='subtotal']").val()+"&valor_factu="+$("input[name*='total_pagar']").val()+"&tipo_venta="+$("input[name=tipo_venta]:checked").val()+"&cuotas=0&id_cliente=0&id_productos="+productos.toString()
+            console.log(values)
+        }
+    if (productos.length == 0) {
+        notificacion("No existe producto agregado a la lista para generar la factura.", "success")
+        return false
+    }
+      $.ajax({
+        type : 'POST',
+        data: values,
+        url: '/inventario/php/facturacion/guardar_factura.php',
+        success: function(respuesta) {
+          let obj = JSON.parse(respuesta)
+          if (obj.success) {
+            notificacion("La factura se ha agregado exitosamente.", "success")
+            //limpiar_form()
+            Showventa()
+            $("input[name*='id_producto']").focus()
+          }else{
+            notificacion("La factura ya se encuentra agregado.", "danger")
+          }
+        },
+        error: function(e) {
+        alert(e)
+          //console.log("No se ha podido obtener la información");
+        }
+      });
+      
+    }
 
   function buscar_productos(param) {
     let values = { 
@@ -413,13 +461,13 @@ $(function() {
 
   function datos_clientes(id) {
       if (id == "1") {
-            $("#content_cliente").html('<div id="content_cliente" class="form-group col-sm-12 py-3">'+
+            $("#content_cliente").html('<div class="form-group col-sm-12 py-3">'+
                                             '<div class="d-block">'+
                                                 '<label style="font-size:14px;" for="">Datos del cliente</label>'+
                                                 '<hr style="margin-top:-1px;">'+
                                                 '<div class="row">'+
                                                     '<div class="col-sm-3">'+
-                                                        '<input class="form-control form-control-sm" type="text" placeholder="Número de cuotas" required name="num_cuota">'+
+                                                        '<input class="form-control form-control-sm" type="text" placeholder="Número de cuotas" required name="cuotas">'+
                                                     '</div>'+
                                                     '<div class="col-sm-6">'+
                                                         '<select required class="form-control form-control-sm select2-single id_cliente" name="id_cliente">'+
@@ -432,9 +480,13 @@ $(function() {
                                                 '</div>'+
                                             '</div>'+
                                         '</div>')
-            buscar_clientes()                                        
+            buscar_clientes()
+            $("#btn_guardar").css("display", "none")
+            $("#btn_guardar_credito").css("display", "inline")                                        
       }else{
         $("#content_cliente").html('')
+        $("#btn_guardar").css("display", "inline")
+        $("#btn_guardar_credito").css("display", "none")
       }
   }
 
@@ -460,8 +512,8 @@ $(function() {
     function confirmar_eliminacion(id) {
 
         boot4.confirm({
-            msg: "Confirm",
-            title: "Test Confirm",
+            title: "Advertencia",
+            msg: "¿Estas seguro que deseas eliminar el regístro?",
             callback: function(result) {
             if(result){
                 eliminar_detalle_factura(id)
