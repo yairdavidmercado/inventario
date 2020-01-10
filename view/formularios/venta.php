@@ -65,7 +65,7 @@ session_start();
                                             <div class="form-group col-sm-6">
                                                 <label style="font-size:14px" for="">Producto</label>
                                                 <br>
-                                                <select onchange="productos_detalle(this.value)" required class="form-control select2-single id_producto" name="id_producto" id="id_producto">
+                                                <select onchange="productos_detalle(this.value)" style="width:100%" required class="form-control select2-single id_producto" name="id_producto" id="id_producto">
                                                     <option value="">Seleccione el producto</option>
                                                 </select>
                                             </div>
@@ -202,7 +202,7 @@ $(function() {
   });
   function guardar_detalle_factura() {
         productos_detalle($("#id_producto").val())
-        if($("#cantidad").val() > $("#existencias").text()){
+        if(parseInt($("#existencias").text()) < parseInt($("#cantidad").val())){
             notificacion("la cantidad establecida no puede superar a la existencia actual del producto")
             return false
       }
