@@ -1,7 +1,7 @@
 <?php
 session_start(); 
-$id_producto = $_POST["modal_id"];
-$cantidad = $_POST["modal_cantidad"];
+$id_factura = $_POST["id1"];
+$vl_abono = $_POST["vl_abono1"];
 $user_id = $_SESSION["idUser"];
 $state = "1";
 
@@ -14,14 +14,14 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "CALL guardar_existencias('".$id_producto."', '".$cantidad."', '".$user_id."', '".$state."');";
+$sql = "CALL guardar_abonos('".$id_factura."', '".$vl_abono."', '".$user_id."', '".$state."');";
 $result = $conn->query($sql);
 
 while ($row = $result->fetch_assoc()) {
     $row_cnt = $result->num_rows;
     if ($row_cnt > 0) {
         $response["success"] = true;
-        $response["message"] = "Su producto ha sido guardado con el número: ".$row["LAST_INSERT_ID()"];
+        $response["message"] = "Su abono ha sido guardado con el número: ".$row["LAST_INSERT_ID()"];
         $response["numero"] = $row["LAST_INSERT_ID()"];
         echo json_encode($response);
         
