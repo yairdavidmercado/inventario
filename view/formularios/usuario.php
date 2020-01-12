@@ -21,6 +21,7 @@ session_start();
     <!-- Bootstrap core CSS -->
 <link href="../../assets/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <meta name="theme-color" content="#563d7c">
 
@@ -140,6 +141,7 @@ session_start();
             <div class="col-sm-9">
                 <div class="card">
                     <div class="card-header">
+                    <a class="btn btn-danger float-right btn-sm" target="_blank" href="/inventario/reports/usuarios.php" type="submit"><i class="fa fa-file-pdf-o" style="font-size:18px" ></i></a>
                         <h5 class="mb-0">Usuarios</h5>
                     </div>
                     <div class="card-body table-responsive">

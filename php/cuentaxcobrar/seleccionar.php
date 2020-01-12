@@ -18,7 +18,7 @@ if ($cod == '1') {
 	(SELECT nombre FROM users WHERE id = facturas.user_id) AS usuario_crea,
 	(SELECT nombre FROM clientes WHERE identificacion = id_cliente LIMIT 1) AS nombre, 
 	CAST(reg_date AS DATE) as fecha
-	FROM facturas WHERE facturas.state = 1 order by id desc;";
+	FROM facturas WHERE facturas.state = 1 AND tipo_venta = '".$parametro1."' order by id desc;";
 	$result = $conn->query($sql);
 	// output data of each row
 	$response["resultado"] = array();

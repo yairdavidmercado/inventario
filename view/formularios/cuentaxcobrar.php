@@ -50,6 +50,22 @@ session_start();
   <div class="py-5 bg-white rounded shadow-sm">
     <div class="container">
         <div class="row">
+            <div class="col-sm-12 mb-3">
+                <label style="font-size:14px;" for="">Tipo de venta</label>
+                <hr style="margin-top:-1px;">
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input id="debit" value="efectivo" onclick="Showfactura(this.value)" name="tipo_venta" type="radio" class="custom-control-input" checked="" required="">
+                    <label class="custom-control-label" for="debit">Efectivo</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input id="bank" value="tarjeta" onclick="Showfactura(this.value)" name="tipo_venta" type="radio" class="custom-control-input" required="">
+                    <label class="custom-control-label" for="bank">Tarjeta</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input id="credit" value="credito" onclick="Showfactura(this.value)" name="tipo_venta" type="radio" class="custom-control-input" required="">
+                    <label class="custom-control-label" for="credit">Crédito</label>
+                </div>
+            </div>
             <div class="mx-auto col-sm-12">
                 <div class="card">
                     <div class="card-header">
@@ -86,7 +102,7 @@ session_start();
                     </div>
                 </div> 
             </div>
-            <div class="col-sm-12 py-4">
+            <div id="ver_credito" style="display:none" class="col-sm-12 py-4">
                 <!-- form user info -->
                 <div id="ver_editar" class="card">
                     <div class="card-header">
@@ -142,6 +158,28 @@ session_start();
                 </div>
                 
             </div>
+            <div class="col-sm-12">
+                <!-- /form user info -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Detalles de facturas</h5>
+                    </div>
+                    <div class="card-body table-responsive">
+                        <table class="table" style="width:100%;font-size:11px">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Id</th>
+                                    <th scope="col">Valor abono</th>
+                                    <th scope="col">Fecha</th>
+                                    <th style="width:10px" scope="col">Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyabono">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
             <!-- Modal -->
             <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -195,9 +233,7 @@ session_start();
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 <script>
 $(function() {
-        Showfactura()
-        buscar_categorias()
-        buscar_proveedores()
+        Showfactura($("input[name^=tipo_venta]:checked").val())
         console.log( "index!" );
   });
 
@@ -214,8 +250,9 @@ $(function() {
             let obj = JSON.parse(respuesta)
             if (obj.success) {
                 notificacion("El factura ha sido actualizado exitosamente.", "success")
+                Showabono($("#id1").val())
+                Showfactura($("input[name^=tipo_venta]:checked").val())
                 limpiar_form()
-                Showfactura()
                 $("input[name*='nit1']").focus()
             }else{
                 alert('Datos invalidos para el acceso')
@@ -228,10 +265,11 @@ $(function() {
       
     }
 
-    function Showfactura() {
+    function Showfactura(tipo_venta) {
+        ver_credito(tipo_venta)
         let values = { 
             cod: "1",
-            parametro1: "1"
+            parametro1: tipo_venta
         }; 
         $.ajax({
         type : 'POST',
@@ -247,7 +285,7 @@ $(function() {
         let fila = ''
         $.each(obj.resultado, function( index, val ) {
             fila += '<tr>'+
-                        '<td class="editar"><h6><span onclick="Showabono('+val.id+')" style="cursor:pointer" class="badge badge-info"><i class="fa fa-eye"></i></span></h6></td>'+
+                        '<td onclick="Showabono('+val.id+')" class="editar"><h6><span style="cursor:pointer" class="badge badge-info"><i class="fa fa-eye"></i></span></h6></td>'+
                         '<td>'+val.id+'</td>'+
                         '<td>'+val.nombre+'</td>'+
                         '<td>'+parseInt(val.valor_factu).toFixed(0)+'</td>'+
@@ -329,6 +367,22 @@ $(function() {
 
     function btn_guardar() {
         $("#submit_guardar").click()
+    }
+
+    function ver_credito(consec) {
+        if (consec == "credito") {
+            $("#ver_credito").css("display", "block")
+            limpiar_form()
+            $("#tbodyabono").html("")
+        }else{
+            $("#ver_credito").css("display", "none")
+        }
+    }
+
+    function ver_editar() {
+        $(".editar").click()
+        $("#ver_editar").css("display", "block")
+        $("#ver_guardar").css("display", "none")
     }
 </script>
 </body>
