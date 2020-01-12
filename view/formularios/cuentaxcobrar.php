@@ -165,16 +165,22 @@ session_start();
                         <h5 class="mb-0">Detalles de facturas</h5>
                     </div>
                     <div class="card-body table-responsive">
-                        <table class="table" style="width:100%;font-size:11px">
+                        <table class="table " id="example" style="width:100%; font-size:10px">
                             <thead class="thead-light">
                                 <tr>
-                                    <th scope="col">Id</th>
-                                    <th scope="col">Valor abono</th>
-                                    <th scope="col">Fecha</th>
-                                    <th style="width:10px" scope="col">Eliminar</th>
+                                    <th style="display:none" scope="col">Id Producto</th>
+                                    <th scope="col">Id Producto</th>
+                                    <th scope="col">Nombre del producto</th>
+                                    <th scope="col">Cantidad</th>
+                                    <th scope="col">Valor unitario</th>
+                                    <th scope="col">IVA</th>
+                                    <th scope="col">Subtotal</th>
+                                    <th scope="col">Total</th>
+                                    <th style="width:10px" scope="col"></th>
                                 </tr>
                             </thead>
-                            <tbody id="tbodyabono">
+                            <tbody id="tbodydetalle_factura">
+
                             </tbody>
                         </table>
                     </div>
@@ -325,6 +331,7 @@ $(function() {
   }
 
   function Showabono(factura) {
+        Showdetalle_factura(factura)
         let values = { 
             cod: "2",
             parametro1: factura
@@ -345,11 +352,57 @@ $(function() {
                             '<td>'+val.id+'</td>'+
                             '<td>'+val.vl_abono+'</td>'+
                             '<td>'+val.fecha+'</td>'+
-                            '<td class="editar"><h6><span style="cursor:pointer" class="badge badge-info"><i class="fa fa-eye"></i></span></h6></td>'+
+                            '<td class="editar"><a style="cursor:pointer" ><i style="font-size:11px" class="fa fa-window-close"></i></a></td>'+
                         '</tr>'
             });
             $("#tbodyabono").html(fila)
         
+        },
+        error: function() {
+        //$(".loader").css("display", "")
+        console.log("No se ha podido obtener la información");
+        }
+    });
+    
+  }
+
+  function Showdetalle_factura(factura) {
+        let values = { 
+            cod: "2",
+            parametro1: factura,
+            parametro2: 1,
+        }; 
+        $.ajax({
+        type : 'POST',
+        data: values,
+        url: '/inventario/php/facturacion/seleccionar.php',
+        beforeSend: function() {
+            //$(".loader").css("display", "inline-block")
+        },
+        success: function(respuesta) {
+        //$(".loader").css("display", "none")
+        let obj = JSON.parse(respuesta)
+        let fila = ''
+        let total_iva = 0
+        let sub_total = 0
+        $.each(obj.resultado, function( index, val ) {
+            total_iva += (parseInt(val.iva)*parseInt(val.cantidad)*(val.vl_venta))/100
+            sub_total += parseInt(val.cantidad)*(val.vl_venta)-((parseInt(val.iva)*parseInt(val.cantidad)*(val.vl_venta))/100)
+            fila += '<tr>'+
+                        '<td class="id_productos" style="display:none" >'+val.id+'</td>'+
+                        '<td>'+val.id_producto+'</td>'+
+                        '<td>'+val.nombre_producto+'</td>'+
+                        '<td>'+val.cantidad+'</td>'+
+                        '<td>'+val.vl_venta+'</td>'+
+                        '<td>'+parseFloat((parseInt(val.iva)*parseInt(val.cantidad)*(val.vl_venta))/100).toFixed(2)+'</td>'+
+                        '<td>'+parseFloat(parseInt(val.cantidad)*(val.vl_venta)-((parseInt(val.iva)*parseInt(val.cantidad)*(val.vl_venta))/100)).toFixed(2)+'</td>'+
+                        '<td>'+parseFloat(parseInt(val.cantidad)*(val.vl_venta)).toFixed(2)+'</td>'+
+                        //'<td class="editar"><a style="cursor:pointer" onclick="ver_editar()" ><i style="font-size:11px" class="fa fa-pencil-square-o"></i></a></td>'+
+                        '<td class="borrar"><a style="cursor:pointer" onclick="confirmar_eliminacion('+val.id+')" ><i style="font-size:11px" class="fa fa-window-close"></i></a></td>'+
+                    '</tr>'
+        });
+        $("#tbodydetalle_factura").html(fila)
+            //$('#example').DataTable().ajax.reload();
         },
         error: function() {
         //$(".loader").css("display", "")
@@ -370,6 +423,7 @@ $(function() {
     }
 
     function ver_credito(consec) {
+        $("#tbodydetalle_factura").html("")
         if (consec == "credito") {
             $("#ver_credito").css("display", "block")
             limpiar_form()

@@ -12,7 +12,10 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 if ($cod == '1') {
-    $sql = "SELECT valor_factu, tipo_venta FROM facturas WHERE state = 1;";
+    $sql = "SELECT CASE WHEN (SELECT SUM(valor_factu) FROM facturas WHERE state = 1 AND tipo_venta = 'efectivo') IS NULL THEN 0 ELSE (SELECT SUM(valor_factu) FROM facturas WHERE state = 1 AND tipo_venta = 'efectivo') END  as vl_efectivo,
+            CASE WHEN (SELECT SUM(valor_factu) FROM facturas WHERE state = 1 AND tipo_venta = 'tarjeta') IS NULL THEN 0 ELSE (SELECT SUM(valor_factu) FROM facturas WHERE state = 1 AND tipo_venta = 'tarjeta') END as vl_tarjeta,
+            (SELECT SUM(vl_abono) FROM abonos WHERE state = 1 ) as vl_credito
+            FROM facturas WHERE state = 1 LIMIT 1;";
     $result = $conn->query($sql);
     // output data of each row
     $response["resultado"] = array();

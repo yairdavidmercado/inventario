@@ -119,21 +119,11 @@ $(function() {
         success: function(respuesta) {
         //$(".loader").css("display", "none")
             let obj = JSON.parse(respuesta)
-            let total_efectivo = 0
-            let total_tarjeta = 0
-            let total_credito = 0
             $.each(obj.resultado, function( index, val ) {
-                if (val.tipo_venta == 'efectivo') {
-                    total_efectivo += parseInt(val.valor_factu)
-                }else if (val.tipo_venta == 'tarjeta') {
-                    total_tarjeta += parseInt(val.valor_factu)
-                }else if (val.tipo_venta == 'credito') {
-                    total_credito += parseInt(val.valor_factu)
-                }
+              $('#total_efectivo').text('$ '+val.vl_efectivo)
+              $('#total_tarjeta').text('$ '+val.vl_tarjeta)
+              $('#total_credito').text('$ '+val.vl_credito)
             });
-            $('#total_efectivo').text('$ '+total_efectivo)
-            $('#total_tarjeta').text('$ '+total_tarjeta)
-            $('#total_credito').text('$ '+total_credito)
         },
         error: function() {
             //$(".loader").css("display", "")

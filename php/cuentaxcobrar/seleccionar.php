@@ -16,7 +16,7 @@ if ($cod == '1') {
 	CASE WHEN (SELECT sum(vl_abono) FROM abonos WHERE id_factura = facturas.id AND abonos.state = 1 ) IS NULL THEN 0 ELSE (SELECT sum(vl_abono) FROM abonos WHERE id_factura = facturas.id AND abonos.state = 1 ) END AS abonado,
     (valor_factu-(CASE WHEN (SELECT sum(vl_abono) FROM abonos WHERE id_factura = facturas.id AND abonos.state = 1 ) IS NULL THEN 0 ELSE ((SELECT sum(vl_abono) FROM abonos WHERE id_factura = facturas.id AND abonos.state = 1 )) END)) as saldo,
 	(SELECT nombre FROM users WHERE id = facturas.user_id) AS usuario_crea,
-	(SELECT nombre FROM clientes WHERE identificacion = id_cliente LIMIT 1) AS nombre, 
+	CASE WHEN (SELECT nombre FROM clientes WHERE identificacion = id_cliente LIMIT 1) IS NULL THEN 'NINGUNO' ELSE (SELECT nombre FROM clientes WHERE identificacion = id_cliente LIMIT 1) END AS nombre, 
 	CAST(reg_date AS DATE) as fecha
 	FROM facturas WHERE facturas.state = 1 AND tipo_venta = '".$parametro1."' order by id desc;";
 	$result = $conn->query($sql);
