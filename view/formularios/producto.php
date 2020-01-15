@@ -246,14 +246,14 @@ session_start();
                         <div class="modal-body">
                                 <div class="container">
                                     <div class="row">
-                                    <div style="display:none" class="col-sm-3">
+                                    <div class="col-sm-3">
                                             <div class="form-group">
-                                            <input maxlength="20" class="form-control form-control-sm" required name="modal_id" type="text" placeholder="Cantidad existente">
+                                            <input maxlength="20" class="form-control form-control-sm" required name="modal_id" id="modal_id" type="text" placeholder="Cantidad existente">
                                             </div>
                                         </div>
                                         <div class="col-sm-12">
                                             <div class="form-group">
-                                            <input maxlength="20" class="form-control form-control-sm" disabled name="modal_nombre" type="text" placeholder="Cantidad existente">
+                                            <input maxlength="20" class="form-control form-control-sm" disabled name="modal_nombre" id="modal_nombre" type="text" placeholder="Cantidad existente">
                                             </div>
                                         </div>
                                         <div class="col-sm-12">
@@ -266,7 +266,7 @@ session_start();
                             </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                            <button type="submit" alert() class="btn btn-primary">Guardar cambios</button>
+                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
                         </div>
                         </div>
                     </div>
@@ -400,7 +400,8 @@ $(function() {
         });
         $("#tbodytable").html(fila)
         $('#example').DataTable({
-            "ordering": false
+            "ordering": false,
+            "paging": false
         });
 
             $(".editar").click(function() {
@@ -432,8 +433,8 @@ $(function() {
                 $(this).parents("tr").find("td").each(function(){
                     valores.push($(this).html());
                 });
-                $("input[name*='modal_id']").val(valores[0])
-                $("input[name*='modal_nombre']").val(valores[1])
+                $("#modal_id").val(valores[0])
+                $("#modal_nombre").val(valores[1])
 
             })
         },

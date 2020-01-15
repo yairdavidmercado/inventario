@@ -52,7 +52,7 @@ session_start();
         <h4 class="my-0 font-weight-normal">Efectivo</h4>
       </div>
       <div class="card-body">
-        <h2 class="card-title pricing-card-title" id="total_efectivo"> <small class="text-muted">/ mo</small></h2>
+        <h2 class="card-title pricing-card-title">$ <span id="total_efectivo" class="text-muted total_efectivo"></span></h2>
         <ul class="list-unstyled mt-3 mb-4">
           <li>10 users included</li>
           <li>2 GB of storage</li>
@@ -66,7 +66,7 @@ session_start();
         <h4 class="my-0 font-weight-normal">Banco</h4>
       </div>
       <div class="card-body">
-        <h2 class="card-title pricing-card-title" id="total_tarjeta"><small class="text-muted">/ mo</small></h2>
+        <h2 class="card-title pricing-card-title">$ <span id="total_tarjeta" class="text-muted total_tarjeta"></span></h2>
         <ul class="list-unstyled mt-3 mb-4">
           <li>20 users included</li>
           <li>10 GB of storage</li>
@@ -80,7 +80,7 @@ session_start();
         <h4 class="my-0 font-weight-normal">Crédito</h4>
       </div>
       <div class="card-body">
-        <h2 class="card-title pricing-card-title" id="total_credito"><small class="text-muted">/ mo</small></h2>
+        <h2 class="card-title pricing-card-title">$ <span id="total_credito" class="text-muted total_credito"></span></h2>
         <ul class="list-unstyled mt-3 mb-4">
           <li>30 users included</li>
           <li>15 GB of storage</li>
@@ -103,58 +103,6 @@ $(function() {
         console.log( "index!" );
         cuentas()
   });
-  function cuentas() {
-        let values = { 
-            cod: "1",
-            parametro1: 1,
-            parametro2: 2
-        }; 
-        $.ajax({
-        type : 'POST',
-        data: values,
-        url: '/inventario/php/caja/seleccionar.php',
-        beforeSend: function() {
-            //$(".loader").css("display", "inline-block")
-        },
-        success: function(respuesta) {
-        //$(".loader").css("display", "none")
-            let obj = JSON.parse(respuesta)
-            $.each(obj.resultado, function( index, val ) {
-              $('#total_efectivo').text('$ '+val.vl_efectivo)
-              $('#total_tarjeta').text('$ '+val.vl_tarjeta)
-              $('#total_credito').text('$ '+val.vl_credito)
-            });
-        },
-        error: function() {
-            //$(".loader").css("display", "")
-            console.log("No se ha podido obtener la información");
-        }
-    });
-    
-  }
-
-    function actualizar_cajaes() {
-      $.ajax({
-        type : 'POST',
-        data: $("#form_actualizar").serialize(),
-        url: '/inventario/php/caja/actualizar.php',
-        success: function(respuesta) {
-          let obj = JSON.parse(respuesta)
-          if (obj.success) {
-            notificacion("El caja ha sido actualizado exitosamente.", "success")
-            //limpiar_form()
-            Showcaja()
-            $("input[name*='nit1']").focus()
-          }else{
-            alert('Datos invalidos para el acceso')
-          }
-        },
-        error: function() {
-          console.log("No se ha podido obtener la información");
-        }
-      });
-      
-    }
 
     function Showcaja() {
         let values = { 

@@ -15,22 +15,45 @@ session_start();
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <!-- <li class="nav-item">
-                <a class="nav-link" href="#">Archivo</a>
-            </li> -->
+            <li class="nav-item">
+                <a class="nav-link" href="/inventario/home.php">Inicio</a>
+            </li>
             <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Archivo
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Something else here</a>
-            </div>
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Usuarios
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">Registrar cliente</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Añadir usuario</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Ventas
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">Nueva venta</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Registrar productos</a>
+                    <a class="dropdown-item" href="#">Registrar proveedores</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Cuentas
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">Buscar cuentas por cobrar</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Buscar cuentas por pagar</a>
+                    <a class="dropdown-item" href="#">Registrar egresos</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Registrar ingresos</a>
+                </div>
             </li>
             <li class="nav-item">
-            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                <a class="nav-link" href="#" >Caja general</a>
             </li>
         </ul>
         <div class="form-inline my-2 my-lg-0">
@@ -63,6 +86,36 @@ session_start();
 	    message: message,
         type: type,
     });
+  }
+
+  function cuentas() {
+          let values = { 
+              cod: "1",
+              parametro1: 1,
+              parametro2: 2
+          }; 
+        $.ajax({
+        type : 'POST',
+        data: values,
+        url: '/inventario/php/caja/seleccionar.php',
+        beforeSend: function() {
+            //$(".loader").css("display", "inline-block")
+        },
+        success: function(respuesta) {
+        //$(".loader").css("display", "none")
+            let obj = JSON.parse(respuesta)
+            $.each(obj.resultado, function( index, val ) {
+              $('.total_efectivo').text(val.vl_efectivo)
+              $('.total_tarjeta').text(val.vl_tarjeta)
+              $('.total_credito').text(val.vl_credito)
+            });
+        },
+        error: function() {
+            //$(".loader").css("display", "")
+            console.log("No se ha podido obtener la información");
+        }
+    });
+    
   }
 
   function buscar_categorias(param) {

@@ -12,9 +12,19 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 if ($cod == '1') {
-    $sql = "SELECT CASE WHEN (SELECT SUM(valor_factu) FROM facturas WHERE state = 1 AND tipo_venta = 'efectivo') IS NULL THEN 0 ELSE (SELECT SUM(valor_factu) FROM facturas WHERE state = 1 AND tipo_venta = 'efectivo') END  as vl_efectivo,
-            CASE WHEN (SELECT SUM(valor_factu) FROM facturas WHERE state = 1 AND tipo_venta = 'tarjeta') IS NULL THEN 0 ELSE (SELECT SUM(valor_factu) FROM facturas WHERE state = 1 AND tipo_venta = 'tarjeta') END as vl_tarjeta,
-            (SELECT SUM(vl_abono) FROM abonos WHERE state = 1 ) as vl_credito
+    $sql = "SELECT 
+            (IFNULL( (SELECT SUM(valor_factu) FROM facturas WHERE state = 1 AND tipo_venta = 'efectivo'), 0))
+            -
+            (IFNULL( (SELECT SUM(vl_egreso) FROM egresos WHERE state = 1 AND ubicacion = 'efectivo'), 0)) 
+            as vl_efectivo,
+            (IFNULL( (SELECT SUM(valor_factu) FROM facturas WHERE state = 1 AND tipo_venta = 'tarjeta'), 0))
+            -
+            (IFNULL( (SELECT SUM(vl_egreso) FROM egresos WHERE state = 1 AND ubicacion = 'tarjeta'), 0)) 
+            as vl_tarjeta,
+            (IFNULL((SELECT SUM(vl_abono) FROM abonos WHERE state = 1 ), 0))
+            -
+            (IFNULL( (SELECT SUM(vl_egreso) FROM egresos WHERE state = 1 AND ubicacion = 'credito'), 0)) 
+            as vl_credito
             FROM facturas WHERE state = 1 LIMIT 1;";
     $result = $conn->query($sql);
     // output data of each row
@@ -38,28 +48,6 @@ if ($cod == '1') {
         echo json_encode($response);
     }
     //termina cod 1
-}elseif ($cod == '2') {
-    $sql = "SELECT * FROM clientes WHERE state = $parametro2 order by id desc;";
-    $result = $conn->query($sql);
-    // output data of each row
-    $response["resultado"] = array();
-    if ($result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
-            $datos = array();
-
-                                // push single product into final response array
-                                array_push($response["resultado"], $row);
-
-                                
-        }
-        $response["success"] = true;
-        echo json_encode($response);
-    } else {
-        $response["success"] = false;
-                            $response["message"] = "No se encontraron registros";
-                            // echo no users JSON
-                            echo json_encode($response);
-    }
 }
 //termina cod 2
 $conn->close();

@@ -145,7 +145,7 @@ session_start();
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <button type="button" class="btn btn-sm" style="background-color: #6c63ff; color:#fff">Registrar egresos</button>
+                <a  href="view/formularios/egreso.php" class="btn btn-sm" style="background-color: #6c63ff; color:#fff">Registrar egresos</a>
                 </div>
                 <!-- <small class="text-muted">9 mins</small> -->
               </div>
