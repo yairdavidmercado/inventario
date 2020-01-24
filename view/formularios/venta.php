@@ -48,9 +48,18 @@ session_start();
   <?php require("../menu.php"); ?>
 
 <main role="main" class="container py-5">
-  <div class="py-5 bg-white rounded shadow-sm">
+  <div class="py-2 bg-white rounded shadow-sm">
     <div class="container">
-    <div class="row">
+        <div class="row">
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <select ref="select" required class="form-control form-control-sm id_bodegas" name="">
+                        <option value="">Seleccione el bodegas</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-sm-9">
                 <div class="card">
                     <div class="card-header">
@@ -196,6 +205,7 @@ session_start();
     <script src="/inventario/assets/js/bootstrap.min.js" crossorigin="anonymous"></script>
 <script>
 $(function() {
+        buscar_bodegas()
         Showventa()
         buscar_productos()
         console.log( "index!" );

@@ -18,7 +18,8 @@ if ($cod == '1') {
 	(SELECT nombre FROM users WHERE id = facturas.user_id) AS usuario_crea,
 	CASE WHEN (SELECT nombre FROM clientes WHERE identificacion = id_cliente LIMIT 1) IS NULL THEN 'NINGUNO' ELSE (SELECT nombre FROM clientes WHERE identificacion = id_cliente LIMIT 1) END AS nombre, 
 	CAST(reg_date AS DATE) as fecha
-	FROM facturas WHERE facturas.state = 1 AND tipo_venta = '".$parametro1."' order by id desc;";
+	FROM facturas WHERE facturas.state = 1 AND tipo_venta = '".$parametro1."'
+	AND (valor_factu-(CASE WHEN (SELECT sum(vl_abono) FROM abonos WHERE id_factura = facturas.id AND abonos.state = 1 ) IS NULL THEN 0 ELSE ((SELECT sum(vl_abono) FROM abonos WHERE id_factura = facturas.id AND abonos.state = 1 )) END)) > 0 order by id desc;";
 	$result = $conn->query($sql);
 	// output data of each row
 	$response["resultado"] = array();
@@ -64,14 +65,14 @@ if ($cod == '1') {
 							echo json_encode($response);
 	}
 }elseif ($cod == '3') {
-	$sql = "SELECT *, 
-	CAST(reg_date AS DATE) as fecha, 
-	((vl_costo*(CAST(iva AS DECIMAL(5,0))))/100) as total_iva,
-	IF((select sum(cantidad) FROM existencias WHERE id_producto = productos.id ) IS NULL, 0 ,(select sum(cantidad) FROM existencias WHERE id_producto = productos.id )-(IF ((SELECT SUM(cantidad) FROM detalle_factura WHERE id_producto = productos.id AND detalle_factura.state = 1) IS NULL, 0, (SELECT SUM(cantidad) FROM detalle_factura WHERE id_producto = productos.id AND detalle_factura.state = 1)))) as cantidad,
-	(vl_costo+((vl_costo*(CAST(iva AS DECIMAL(5,0))))/100)) as total_costo,
-	(SELECT TRIM(nombre) FROM categorias WHERE categorias.id = productos.id_categoria) as categoria,
-	(SELECT TRIM(nombre) FROM proveedors WHERE proveedors.id = productos.id_proveedor) as proveedor 
-	FROM productos WHERE productos.id = $parametro1 AND productos.state = 1 order by id desc;";
+	$sql = "SELECT *,
+	CASE WHEN (SELECT sum(vl_abono) FROM abonos WHERE id_factura = facturas.id AND abonos.state = 1 ) IS NULL THEN 0 ELSE (SELECT sum(vl_abono) FROM abonos WHERE id_factura = facturas.id AND abonos.state = 1 ) END AS abonado,
+    (valor_factu-(CASE WHEN (SELECT sum(vl_abono) FROM abonos WHERE id_factura = facturas.id AND abonos.state = 1 ) IS NULL THEN 0 ELSE ((SELECT sum(vl_abono) FROM abonos WHERE id_factura = facturas.id AND abonos.state = 1 )) END)) as saldo,
+	(SELECT nombre FROM users WHERE id = facturas.user_id) AS usuario_crea,
+	CASE WHEN (SELECT nombre FROM clientes WHERE identificacion = id_cliente LIMIT 1) IS NULL THEN 'NINGUNO' ELSE (SELECT nombre FROM clientes WHERE identificacion = id_cliente LIMIT 1) END AS nombre, 
+	CAST(reg_date AS DATE) as fecha
+	FROM facturas WHERE facturas.state = 1 AND tipo_venta = '".$parametro1."' 
+	AND (valor_factu-(CASE WHEN (SELECT sum(vl_abono) FROM abonos WHERE id_factura = facturas.id AND abonos.state = 1 ) IS NULL THEN 0 ELSE ((SELECT sum(vl_abono) FROM abonos WHERE id_factura = facturas.id AND abonos.state = 1 )) END)) <= 0 order by id desc;";
 	$result = $conn->query($sql);
 	// output data of each row
 	$response["resultado"] = array();

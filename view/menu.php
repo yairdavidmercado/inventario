@@ -118,6 +118,37 @@ session_start();
     
   }
 
+  function buscar_bodegas() {
+    let values = { 
+            cod: "2",
+            parametro: '1',
+            state: '1'
+        }; 
+        $.ajax({
+        type : 'POST',
+        data: values,
+        url: '/inventario/php/bodegas/seleccionar.php',
+        beforeSend: function() {
+            //$(".loader").css("display", "inline-block")
+        },
+        success: function(respuesta) {
+            alert(respuesta)
+            //$(".loader").css("display", "none")
+            let obj = JSON.parse(respuesta)
+            let fila = ''
+            $.each(obj.resultado, function( index, val ) {
+                fila += '<option value="'+val.id+'">'+val.nombre+'</option>';
+            });
+            $(".id_bodegas").html('<option value="">Seleccione el bodegas</option>'+fila)
+        },
+        error: function() {
+        //$(".loader").css("display", "")
+        console.log("No se ha podido obtener la información");
+        }
+    });
+    
+  }
+
   function buscar_categorias(param) {
     let values = { 
             cod: "2",

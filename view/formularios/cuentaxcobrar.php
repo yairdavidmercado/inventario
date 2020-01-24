@@ -54,51 +54,81 @@ session_start();
                 <label style="font-size:14px;" for="">Tipo de venta</label>
                 <hr style="margin-top:-1px;">
                 <div class="custom-control custom-radio custom-control-inline">
-                    <input id="debit" value="efectivo" onclick="Showfactura(this.value)" name="tipo_venta" type="radio" class="custom-control-input" checked="" required="">
+                    <input id="debit" value="efectivo" onclick="Showfactura_pendientes(this.value)" name="tipo_venta" type="radio" class="custom-control-input" checked="" required="">
                     <label class="custom-control-label" for="debit">Efectivo</label>
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
-                    <input id="bank" value="tarjeta" onclick="Showfactura(this.value)" name="tipo_venta" type="radio" class="custom-control-input" required="">
+                    <input id="bank" value="tarjeta" onclick="Showfactura_pendientes(this.value)" name="tipo_venta" type="radio" class="custom-control-input" required="">
                     <label class="custom-control-label" for="bank">Tarjeta</label>
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
-                    <input id="credit" value="credito" onclick="Showfactura(this.value)" name="tipo_venta" type="radio" class="custom-control-input" required="">
+                    <input id="credit" value="credito" onclick="Showfactura_pendientes(this.value)" name="tipo_venta" type="radio" class="custom-control-input" required="">
                     <label class="custom-control-label" for="credit">Crédito</label>
                 </div>
             </div>
             <div class="mx-auto col-sm-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">Facturas generadas</h5>
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Facturas pendientes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Facturas pagadas</a>
+                </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Facturas pendientes</h5>
+                            </div>
+                            <div class="card-body table-responsive-sm">
+                                <table class="table" id="example" style="width:100%;font-size:11px">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th style="width:10px" scope="col">Ver abono</th>
+                                            <th scope="col">Id</th>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Valor factura</th>
+                                            <th scope="col">Abonado</th>
+                                            <th scope="col">Saldo</th>
+                                            <th scope="col">Cuotas</th>
+                                            <th scope="col">Tipo de venta</th>
+                                            <th scope="col">Vendedor</th>
+                                            <th scope="col">Fecha</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodytable">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body table-responsive-sm">
-                        <table class="table" id="example" style="width:100%;font-size:11px">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th style="width:10px" scope="col">Ver abono</th>
-                                    <th scope="col">Id</th>
-                                    <th scope="col">Nombre</th>
-                                    <th scope="col">Valor factura</th>
-                                    <th scope="col">Abonado</th>
-                                    <th scope="col">Saldo</th>
-                                    <th scope="col">Cuotas</th>
-                                    <th scope="col">Tipo de venta</th>
-                                    <th scope="col">Vendedor</th>
-                                    <th scope="col">Fecha</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbodytable">
-                                <!-- <tr>
-                                    <td>{{item.nit}}</td>
-                                    <td>{{item.nombre}}</td>
-                                    <td>{{item.direccion}}</td>
-                                    <td>{{item.telefono}}</td>
-                                    <td>{{item.email}}</td>
-                                    <td class="editar"><button class="btn btn-warning btn-sm" onclick="ver_editar()" >Editar</button></td>
-                                    <td ><button class="btn btn-danger btn-sm">x</button></td>
-                                </tr> -->
-                            </tbody>
-                        </table>
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Facturas terminadas</h5>
+                            </div>
+                            <div class="card-body table-responsive-sm">
+                                <table class="table" id="example1" style="width:100%;font-size:11px">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th style="width:10px" scope="col">Ver abono</th>
+                                            <th scope="col">Id</th>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Valor factura</th>
+                                            <th scope="col">Abonado</th>
+                                            <th scope="col">Saldo</th>
+                                            <th scope="col">Cuotas</th>
+                                            <th scope="col">Tipo de venta</th>
+                                            <th scope="col">Vendedor</th>
+                                            <th scope="col">Fecha</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodytable1">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div> 
             </div>
@@ -239,7 +269,7 @@ session_start();
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 <script>
 $(function() {
-        Showfactura($("input[name^=tipo_venta]:checked").val())
+        Showfactura_pendientes($("input[name^=tipo_venta]:checked").val())
         console.log( "index!" );
   });
 
@@ -257,7 +287,7 @@ $(function() {
             if (obj.success) {
                 notificacion("El factura ha sido actualizado exitosamente.", "success")
                 Showabono($("#id1").val())
-                Showfactura($("input[name^=tipo_venta]:checked").val())
+                Showfactura_pendientes($("input[name^=tipo_venta]:checked").val())
                 limpiar_form()
                 $("input[name*='nit1']").focus()
             }else{
@@ -271,7 +301,8 @@ $(function() {
       
     }
 
-    function Showfactura(tipo_venta) {
+    function Showfactura_pendientes(tipo_venta) {
+        Showfactura_terminadas(tipo_venta)
         ver_credito(tipo_venta)
         let values = { 
             cod: "1",
@@ -305,7 +336,67 @@ $(function() {
         });
         $("#tbodytable").html(fila)
         $('#example').DataTable({
-            "ordering": false
+            "ordering": false,
+            "paging": false
+        });
+
+            $(".editar").click(function() {
+                var valores=[];
+    
+                // Obtenemos todos los valores contenidos en los <td> de la fila
+                // seleccionada
+                $(this).parents("tr").find("td").each(function(){
+                    valores.push($(this).html());
+                });
+                $("input[name*='vl_abono1']").focus()
+                $("input[name*='id1']").val(valores[1])
+                $("input[name*='nombre1']").val(valores[2])
+            })
+        
+        },
+        error: function() {
+        //$(".loader").css("display", "")
+        console.log("No se ha podido obtener la información");
+        }
+    });
+    
+  }
+
+  function Showfactura_terminadas(tipo_venta) {
+        let values = { 
+            cod: "3",
+            parametro1: tipo_venta
+        }; 
+        $.ajax({
+        type : 'POST',
+        data: values,
+        url: '/inventario/php/cuentaxcobrar/seleccionar.php',
+        beforeSend: function() {
+            //$(".loader").css("display", "inline-block")
+        },
+        success: function(respuesta) {
+        //$(".loader").css("display", "none")
+        let obj = JSON.parse(respuesta)
+        $("#example1").dataTable().fnDestroy();
+        let fila = ''
+        $.each(obj.resultado, function( index, val ) {
+            fila += '<tr>'+
+                        '<td onclick="Showabono('+val.id+')" class="editar"><h6><span style="cursor:pointer" class="badge badge-info"><i class="fa fa-eye"></i></span></h6></td>'+
+                        '<td>'+val.id+'</td>'+
+                        '<td>'+val.nombre+'</td>'+
+                        '<td>'+parseInt(val.valor_factu).toFixed(0)+'</td>'+
+                        '<td>'+parseInt(val.abonado).toFixed(0)+'</td>'+
+                        '<td>'+parseInt(val.saldo).toFixed(0)+'</td>'+
+                        '<td>'+val.cuotas+'</td>'+
+                        '<td><span class="text-uppercase">'+val.tipo_venta+'</span></td>'+
+                        '<td>'+val.usuario_crea+'</td>'+
+                        '<td>'+val.fecha+'</td>'+
+                    '</tr>'
+        });
+        $("#tbodytable1").html(fila)
+        $('#example1').DataTable({
+            "ordering": false,
+            "paging": false
         });
 
             $(".editar").click(function() {

@@ -284,7 +284,8 @@ $(function() {
         });
         $("#tbodytable").html(fila)
         $('#example').DataTable({
-            "ordering": false
+            "ordering": false,
+            "paging": false
         });
 
         $(".editar").click(function() {
