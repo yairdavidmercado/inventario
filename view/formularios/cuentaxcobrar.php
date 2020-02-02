@@ -22,6 +22,7 @@ session_start();
 <link href="../../assets/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 
 <meta name="theme-color" content="#563d7c">
 
@@ -47,22 +48,31 @@ session_start();
   <?php require("../menu.php"); ?>
 
 <main role="main" class="container py-5">
-  <div class="py-5 bg-white rounded shadow-sm">
+  <div class="py-2 bg-white rounded shadow-sm">
     <div class="container">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <select ref="select" onchange="Showfactura_pendientes(this.value, $('input[name^=tipo_venta]:checked').val())" class="form-control form-control-sm id_bodegas" id="bodega" name="bodega">
+                        <option value="">Seleccione el bodegas</option>
+                    </select>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-sm-12 mb-3">
                 <label style="font-size:14px;" for="">Tipo de venta</label>
                 <hr style="margin-top:-1px;">
                 <div class="custom-control custom-radio custom-control-inline">
-                    <input id="debit" value="efectivo" onclick="Showfactura_pendientes(this.value)" name="tipo_venta" type="radio" class="custom-control-input" checked="" required="">
+                    <input id="debit" value="efectivo" onclick="Showfactura_pendientes($('#bodega').val(), this.value)" name="tipo_venta" type="radio" class="custom-control-input" checked="" required="">
                     <label class="custom-control-label" for="debit">Efectivo</label>
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
-                    <input id="bank" value="tarjeta" onclick="Showfactura_pendientes(this.value)" name="tipo_venta" type="radio" class="custom-control-input" required="">
+                    <input id="bank" value="tarjeta" onclick="Showfactura_pendientes($('#bodega').val(),this.value)" name="tipo_venta" type="radio" class="custom-control-input" required="">
                     <label class="custom-control-label" for="bank">Tarjeta</label>
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
-                    <input id="credit" value="credito" onclick="Showfactura_pendientes(this.value)" name="tipo_venta" type="radio" class="custom-control-input" required="">
+                    <input id="credit" value="credito" onclick="Showfactura_pendientes($('#bodega').val(),this.value)" name="tipo_venta" type="radio" class="custom-control-input" required="">
                     <label class="custom-control-label" for="credit">Crédito</label>
                 </div>
             </div>
@@ -95,6 +105,7 @@ session_start();
                                             <th scope="col">Tipo de venta</th>
                                             <th scope="col">Vendedor</th>
                                             <th scope="col">Fecha</th>
+                                            <th style="width:10px"></th>
                                         </tr>
                                     </thead>
                                     <tbody id="tbodytable">
@@ -122,6 +133,7 @@ session_start();
                                             <th scope="col">Tipo de venta</th>
                                             <th scope="col">Vendedor</th>
                                             <th scope="col">Fecha</th>
+                                            <th style="width:10px"></th>
                                         </tr>
                                     </thead>
                                     <tbody id="tbodytable1">
@@ -267,9 +279,10 @@ session_start();
     <script src="/inventario/assets/js/bootstrap-notify.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 <script>
 $(function() {
-        Showfactura_pendientes($("input[name^=tipo_venta]:checked").val())
+        buscar_bodegas()
         console.log( "index!" );
   });
 
@@ -287,7 +300,7 @@ $(function() {
             if (obj.success) {
                 notificacion("El factura ha sido actualizado exitosamente.", "success")
                 Showabono($("#id1").val())
-                Showfactura_pendientes($("input[name^=tipo_venta]:checked").val())
+                Showfactura_pendientes($('#bodega').val(), $("input[name^=tipo_venta]:checked").val())
                 limpiar_form()
                 $("input[name*='nit1']").focus()
             }else{
@@ -301,12 +314,13 @@ $(function() {
       
     }
 
-    function Showfactura_pendientes(tipo_venta) {
+    function Showfactura_pendientes(bodega, tipo_venta) {
         Showfactura_terminadas(tipo_venta)
         ver_credito(tipo_venta)
         let values = { 
             cod: "1",
-            parametro1: tipo_venta
+            parametro1: tipo_venta,
+            parametro2: bodega
         }; 
         $.ajax({
         type : 'POST',
@@ -332,6 +346,7 @@ $(function() {
                         '<td><span class="text-uppercase">'+val.tipo_venta+'</span></td>'+
                         '<td>'+val.usuario_crea+'</td>'+
                         '<td>'+val.fecha+'</td>'+
+                        '<td onclick="eliminar_factura('+val.id+')"><a style="cursor:pointer" ><i style="font-size:11px" class="fa fa-window-close"></i></a></td>'+
                     '</tr>'
         });
         $("#tbodytable").html(fila)
@@ -391,6 +406,7 @@ $(function() {
                         '<td><span class="text-uppercase">'+val.tipo_venta+'</span></td>'+
                         '<td>'+val.usuario_crea+'</td>'+
                         '<td>'+val.fecha+'</td>'+
+                        '<td onclick="eliminar_factura('+val.id+')"><a style="cursor:pointer" ><i style="font-size:11px" class="fa fa-window-close"></i></a></td>'+
                     '</tr>'
         });
         $("#tbodytable1").html(fila)
@@ -529,6 +545,50 @@ $(function() {
         $("#ver_editar").css("display", "block")
         $("#ver_guardar").css("display", "none")
     }
+
+    function eliminar_factura(id) {
+        $.confirm({
+            title: 'Atención!',
+            content: '¿ Estas seguro de que quieres eliminar la factura número '+id+' ?',
+            buttons: {
+                confirm: function () {
+                    if ($("#bodega").val() == 0) {
+                        notificacion("Por favor seleccione la bodega.", "danger")
+                        $("#bodega").focus()
+                        return false
+                    }
+                    let values = {
+                        id_factura: id,
+                        tipo_venta: $("input[name^=tipo_venta]:checked").val(),
+                        bodega: $("#bodega").val()
+                    }
+                    $.ajax({
+                        type : 'POST',
+                        data: values,
+                        url: '/inventario/php/cuentaxcobrar/eliminar.php',
+                        success: function(respuesta) {
+                        let obj = JSON.parse(respuesta)
+                        if (obj.numero == 1) {
+                            //$.alert('Confirmed!');
+                            notificacion("el producto se ha eliminado exitosamente.", "success")
+                            //limpiar_form()
+                            Showfactura_pendientes($("input[name^=tipo_venta]:checked").val())
+                        }else{
+                            notificacion("El producto no se encuentra en la base de datos, por favor actualice la página.", "danger")
+                        }
+                        },
+                        error: function() {
+                        console.log("No se ha podido obtener la información");
+                        }
+                    });
+                },
+                cancel: function () {
+                    //$.alert('Canceled!');
+                }
+            }
+        });
+    }
+
 </script>
 </body>
 </html>

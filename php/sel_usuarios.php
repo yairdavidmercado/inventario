@@ -26,6 +26,7 @@ if ($result->num_rows > 0) {
 							$datos["email"] 			= $row["email"];
 							$_SESSION["idUser"]			= $row["id"];
 							$_SESSION["nameUser"]		= $row["nombre"];
+							$_SESSION["profile"]		= $row["perfil"];
 
 							// push single product into final response array
 							array_push($response["resultado"], $datos);

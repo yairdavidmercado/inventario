@@ -21,7 +21,7 @@ if ($cod == '1') {
             -
             (IFNULL( (SELECT SUM(vl_egreso) FROM egresos WHERE state = 1 AND ubicacion = 'tarjeta'), 0)) 
             as vl_tarjeta,
-            (IFNULL((SELECT SUM(vl_abono) FROM abonos WHERE state = 1 ), 0))
+            (IFNULL((SELECT SUM(vl_abono) FROM abonos INNER JOIN facturas ON facturas.id = abonos.id_factura WHERE facturas.state = 1 ), 0))
             -
             (IFNULL( (SELECT SUM(vl_egreso) FROM egresos WHERE state = 1 AND ubicacion = 'credito'), 0)) 
             as vl_credito

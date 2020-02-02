@@ -2,6 +2,7 @@
 session_start(); 
 $id_producto = $_POST["modal_id"];
 $cantidad = $_POST["modal_cantidad"];
+$bodega = $_POST["bodega"];
 $user_id = $_SESSION["idUser"];
 $state = "1";
 
@@ -14,7 +15,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "CALL guardar_existencias('".$id_producto."', '".$cantidad."', '".$user_id."', '".$state."');";
+$sql = "CALL guardar_existencias('".$id_producto."', '".$cantidad."', '".$bodega."', '".$user_id."', '".$state."');";
 $result = $conn->query($sql);
 
 while ($row = $result->fetch_assoc()) {

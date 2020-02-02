@@ -4,6 +4,7 @@ $id_producto = $_POST["id_producto"];
 $vl_venta = $_POST["vl_venta"];
 $cantidad = $_POST["cantidad"];
 $id_factura = "0";
+$bodega = $_POST["bodega"];
 $user_id = $_SESSION["idUser"];
 $state = "0";
 
@@ -16,7 +17,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT guardar_detalle_factura('".$id_producto."', '".$vl_venta."', '".$cantidad."', '".$id_factura."', '".$user_id."', '".$state."');";
+$sql = "SELECT guardar_detalle_factura('".$id_producto."', '".$vl_venta."', '".$cantidad."', '".$id_factura."', '".$bodega."', '".$user_id."', '".$state."');";
 $result = $conn->query($sql);
 
 while ($row = $result->fetch_assoc()) {

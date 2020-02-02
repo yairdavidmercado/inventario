@@ -47,105 +47,110 @@ session_start();
   <?php require("../menu.php"); ?>
 
 <main role="main" class="container py-5">
-  <div class="py-5 bg-white rounded shadow-sm">
-    <div class="container">
-        <div class="alert alert-success float-right" style="width:100%">
-            <label for="" class="m-2"><b><h4><i class="fa fa-money"></i></h4>Efectivo: $ <span class="total_efectivo" id="total_efectivo" for=""></span></b></label>
-            <label for="" class="m-2"><b><h4><i class="fa fa-university"></i></h4> Banco: $ <span class="total_tarjeta" id="total_tarjeta" for=""></span></b></label> 
-            <label for="" class="m-2"><b><h4><i class="fa fa-credit-card"></i></h4> Crédito: $ <span class="total_credito" id="total_credito" for=""></span></b></label> 
-        </div>
-    <div class="row">
-    <div class="mx-auto col-sm-12">
-                <!-- form user info -->
-                <div id="ver_guardar" class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">Crear egreso</h5>
-                    </div>
-                    <div class="card-body">
-                        <form name="crear_egreso" class="form" role="form" id="form_guardar" role="form" onsubmit="event.preventDefault(); return guardar_egresos();" autocomplete="off">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <select ref="select" required class="form-control form-control-sm tipo_egreso" id="tipo_egreso" name="tipo_egreso">
-                                                <option value="">Seleccione el tipo de egreso</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <input maxlength="20" class="form-control form-control-sm" required name="vl_egreso" id="vl_egreso" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" type="text" placeholder="Cantidad del egreso">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 mb-3">
-                                        <label style="font-size:14px;" for="">De donde hará el egreso</label>
-                                        <hr style="margin-top:-1px;">
-                                        <div class="custom-control custom-radio custom-control-inline">
-                                            <input id="debit" value="efectivo" name="ubicacion" type="radio" class="custom-control-input" checked="" required="">
-                                            <label class="custom-control-label" for="debit">Efectivo</label>
-                                        </div>
-                                        <div class="custom-control custom-radio custom-control-inline">
-                                            <input id="bank" value="tarjeta" name="ubicacion" type="radio" class="custom-control-input" required="">
-                                            <label class="custom-control-label" for="bank">Tarjeta</label>
-                                        </div>
-                                        <div class="custom-control custom-radio custom-control-inline">
-                                            <input id="credit" value="credito" name="ubicacion" type="radio" class="custom-control-input" required="">
-                                            <label class="custom-control-label" for="credit">Crédito</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <div class="form-group">
-                                            <textarea required class="form-control form-control-sm" name="descripcion" id="descripcion" placeholder="Descripción"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <button class="btn btn-primary" type="submit">Guardar</button>
-                                    <button class="btn btn-danger" type="button" onclick="ver_guardar()">Limpiar</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <!-- /form user info -->
-            </div>
-            <div class="col-sm-12 py-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">egresos</h5>
-                    </div>
-                    <div class="card-body table-responsive-sm">
-                        <table class="table" id="example" style="width:100%;font-size:11px">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th scope="col">Tipo de egreso</th>
-                                    <th scope="col">Valor egreso</th>
-                                    <th scope="col">Destino de egreso</th>
-                                    <th scope="col">Descripción</th>
-                                    <th scope="col">Realizado por</th>
-                                    <th scope="col">Fecha</th>
-                                    <th style="width:10px" scope="col"></th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbodytable">
-                                <!-- <tr>
-                                    <td>{{item.nit}}</td>
-                                    <td>{{item.nombre}}</td>
-                                    <td>{{item.direccion}}</td>
-                                    <td>{{item.telefono}}</td>
-                                    <td>{{item.email}}</td>
-                                    <td class="editar"><button class="btn btn-warning btn-sm" onclick="ver_editar()" >Editar</button></td>
-                                    <td ><button class="btn btn-danger btn-sm">x</button></td>
-                                </tr> -->
-                            </tbody>
-                        </table>
+    <div class="py-5 bg-white rounded shadow-sm">
+        <div class="container">
+            <div class="row">
+                <div class="mx-auto col-sm-12">
+                    <div class="alert alert-success float-right" style="width:100%">
+                        <label for="" class="m-2"><b><h4><i class="fa fa-money"></i></h4>Efectivo: $ <span class="total_efectivo" id="total_efectivo" for=""></span></b></label>
+                        <label for="" class="m-2"><b><h4><i class="fa fa-university"></i></h4> Banco: $ <span class="total_tarjeta" id="total_tarjeta" for=""></span></b></label> 
+                        <label for="" class="m-2"><b><h4><i class="fa fa-credit-card"></i></h4> Crédito: $ <span class="total_credito" id="total_credito" for=""></span></b></label> 
                     </div>
                 </div>
             </div>
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    
+            <div class="row">
+                <div class="mx-auto col-sm-12">
+                    <!-- form user info -->
+                    <div id="ver_guardar" class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Crear egreso</h5>
+                        </div>
+                        <div class="card-body">
+                            <form name="crear_egreso" class="form" role="form" id="form_guardar" role="form" onsubmit="event.preventDefault(); return guardar_egresos();" autocomplete="off">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <select ref="select" required class="form-control form-control-sm tipo_egreso" id="tipo_egreso" name="tipo_egreso">
+                                                    <option value="">Seleccione el tipo de egreso</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <input maxlength="20" class="form-control form-control-sm" required name="vl_egreso" id="vl_egreso" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" type="text" placeholder="Cantidad del egreso">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 mb-3">
+                                            <label style="font-size:14px;" for="">De donde hará el egreso</label>
+                                            <hr style="margin-top:-1px;">
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input id="debit" value="efectivo" name="ubicacion" type="radio" class="custom-control-input" checked="" required="">
+                                                <label class="custom-control-label" for="debit">Efectivo</label>
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input id="bank" value="tarjeta" name="ubicacion" type="radio" class="custom-control-input" required="">
+                                                <label class="custom-control-label" for="bank">Tarjeta</label>
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input id="credit" value="credito" name="ubicacion" type="radio" class="custom-control-input" required="">
+                                                <label class="custom-control-label" for="credit">Crédito</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <textarea required class="form-control form-control-sm" name="descripcion" id="descripcion" placeholder="Descripción"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-primary" type="submit">Guardar</button>
+                                        <button class="btn btn-danger" type="button" onclick="ver_guardar()">Limpiar</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /form user info -->
+                </div>
+                <div class="col-sm-12 py-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">egresos</h5>
+                        </div>
+                        <div class="card-body table-responsive-sm">
+                            <table class="table" id="example" style="width:100%;font-size:11px">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">Tipo de egreso</th>
+                                        <th scope="col">Valor egreso</th>
+                                        <th scope="col">Destino de egreso</th>
+                                        <th scope="col">Descripción</th>
+                                        <th scope="col">Realizado por</th>
+                                        <th scope="col">Fecha</th>
+                                        <th style="width:10px" scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodytable">
+                                    <!-- <tr>
+                                        <td>{{item.nit}}</td>
+                                        <td>{{item.nombre}}</td>
+                                        <td>{{item.direccion}}</td>
+                                        <td>{{item.telefono}}</td>
+                                        <td>{{item.email}}</td>
+                                        <td class="editar"><button class="btn btn-warning btn-sm" onclick="ver_editar()" >Editar</button></td>
+                                        <td ><button class="btn btn-danger btn-sm">x</button></td>
+                                    </tr> -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        
+                    </div>
                 </div>
             </div>
         </div>

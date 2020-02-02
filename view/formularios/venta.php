@@ -51,9 +51,9 @@ session_start();
   <div class="py-2 bg-white rounded shadow-sm">
     <div class="container">
         <div class="row">
-            <div class="col-sm-2">
+            <div class="col-sm-3">
                 <div class="form-group">
-                    <select ref="select" required class="form-control form-control-sm id_bodegas" name="">
+                    <select ref="select" onchange="buscar_productos(this.vale)" class="form-control form-control-sm id_bodegas" id="bodega" name="bodega">
                         <option value="">Seleccione el bodegas</option>
                     </select>
                 </div>
@@ -74,7 +74,7 @@ session_start();
                                             <div class="form-group col-sm-6">
                                                 <label style="font-size:14px" for="">Producto</label>
                                                 <br>
-                                                <select onchange="productos_detalle(this.value)" style="width:100%" required class="form-control select2-single id_producto" name="id_producto" id="id_producto">
+                                                <select onchange="productos_detalle(this.value, $('#bodega').val())" style="width:100%" required class="form-control select2-single id_producto" name="id_producto" id="id_producto">
                                                     <option value="">Seleccione el producto</option>
                                                 </select>
                                             </div>
@@ -211,14 +211,19 @@ $(function() {
         console.log( "index!" );
   });
   function guardar_detalle_factura() {
-        productos_detalle($("#id_producto").val())
+        if ($("#bodega").val() == 0) {
+            notificacion("Por favor seleccione la bodega.", "danger")
+            $("#bodega").focus()
+            return false
+        }
+        productos_detalle($("#id_producto").val(), $("#bodega").val())
         if(parseInt($("#existencias").text()) < parseInt($("#cantidad").val())){
             notificacion("la cantidad establecida no puede superar a la existencia actual del producto")
             return false
       }
       $.ajax({
         type : 'POST',
-        data: $("#form_detalle_factura").serialize(),
+        data: $("#form_detalle_factura").serialize()+"&bodega="+$("#bodega").val(),
         url: '/inventario/php/facturacion/guardar_detalle_factura.php',
         success: function(respuesta) {
           let obj = JSON.parse(respuesta)
@@ -336,16 +341,21 @@ $(function() {
   }
 
   function guardar_factura() {
+      if ($("#bodega").val() == 0) {
+        notificacion("Por favor seleccione la bodega.", "danger")
+        $("#bodega").focus()
+        return false
+      }
     let productos = []
     $(".id_productos").each(function(){
         productos.push($(this).text())
     });
     let values = ''
     if ($("input[name=tipo_venta]:checked").val() == 'credito') {
-            values = $("#form_factura").serialize() + "&iva_factu="+$("input[name*='iva']").val()+"&subtotal_factu="+$("input[name*='subtotal']").val()+"&valor_factu="+$("input[name*='total_pagar']").val()+"&id_productos="+productos.toString()
+            values = $("#form_factura").serialize() + "&iva_factu="+$("input[name*='iva']").val()+"&subtotal_factu="+$("input[name*='subtotal']").val()+"&valor_factu="+$("input[name*='total_pagar']").val()+"&id_productos="+productos.toString()+"&bodega="+$("#bodega").val()
             console.log(values)
         }else{
-            values = $("#form_factura").serialize() + "&iva_factu="+$("input[name*='iva']").val()+"&subtotal_factu="+$("input[name*='subtotal']").val()+"&valor_factu="+$("input[name*='total_pagar']").val()+"&tipo_venta="+$("input[name=tipo_venta]:checked").val()+"&cuotas=0&id_cliente=0&id_productos="+productos.toString()
+            values = $("#form_factura").serialize() + "&iva_factu="+$("input[name*='iva']").val()+"&subtotal_factu="+$("input[name*='subtotal']").val()+"&valor_factu="+$("input[name*='total_pagar']").val()+"&tipo_venta="+$("input[name=tipo_venta]:checked").val()+"&cuotas=0&id_cliente=0&id_productos="+productos.toString()+"&bodega="+$("#bodega").val()
             console.log(values)
         }
     if (productos.length == 0) {
@@ -375,10 +385,11 @@ $(function() {
       
     }
 
-  function buscar_productos(param) {
+  function buscar_productos(bodega = 0) {
     let values = { 
             cod: "2",
-            parametro1: '1'
+            parametro1: '1',
+            parametro2: bodega
         }; 
         $.ajax({
         type : 'POST',
@@ -388,6 +399,9 @@ $(function() {
             //$(".loader").css("display", "inline-block")
         },
         success: function(respuesta) {
+            $("input[name*='vl_venta']").val("")
+            $("#vl_costo").text("")
+            $("#existencias").text("")
             //$(".loader").css("display", "none")
             let obj = JSON.parse(respuesta)
             let fila = ''
@@ -410,10 +424,11 @@ $(function() {
     
   }
 
-  function productos_detalle(id) {
+  function productos_detalle(id, bodega) {
     let values = { 
             cod: "3",
-            parametro1: id
+            parametro1: id,
+            parametro2: bodega
         }; 
         $.ajax({
         type : 'POST',

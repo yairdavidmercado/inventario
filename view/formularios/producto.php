@@ -46,10 +46,19 @@ session_start();
   <?php require("../menu.php"); ?>
 
 <main role="main" class="container py-5">
-  <div class="py-5 bg-white rounded shadow-sm">
+  <div class="py-2 bg-white rounded shadow-sm">
     <div class="container">
-    <div class="row">
-    <div class="mx-auto col-sm-12">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <select ref="select" onchange="Showproducto(this.value)" required class="form-control form-control-sm id_bodegas" id="bodega" name="bodega">
+                        <option value="">Seleccione el bodegas</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="mx-auto col-sm-12">
                 <!-- form user info -->
                 <div id="ver_editar" style="display:none" class="card">
                     <div class="card-header">
@@ -213,6 +222,7 @@ session_start();
                                     <th style="display:none" scope="col">id Proveedor</th>
                                     <th style="display:none" scope="col">Perfil</th>
                                     <th style="display:none" scope="col">Estado</th>
+                                    <th scope="col">Bodega</th>
                                     <th style="width:10px" scope="col"></th>
                                     <th style="width:10px" scope="col"></th>
                                 </tr>
@@ -246,17 +256,20 @@ session_start();
                         <div class="modal-body">
                                 <div class="container">
                                     <div class="row">
-                                    <div class="col-sm-3">
+                                        <div class="col-sm-3">
+                                            <label for="">Id producto</label>
                                             <div class="form-group">
-                                            <input maxlength="20" class="form-control form-control-sm" required name="modal_id" id="modal_id" type="text" placeholder="Cantidad existente">
+                                            <input maxlength="20" class="form-control form-control-sm" disabled required name="modal_id1" id="modal_id1" type="text" placeholder="id">
                                             </div>
                                         </div>
-                                        <div class="col-sm-12">
+                                        <div class="col-sm-9">
+                                            <label for="">Nombre producto</label>
                                             <div class="form-group">
                                             <input maxlength="20" class="form-control form-control-sm" disabled name="modal_nombre" id="modal_nombre" type="text" placeholder="Cantidad existente">
                                             </div>
                                         </div>
                                         <div class="col-sm-12">
+                                            <label for="">Cantidad existente</label>
                                             <div class="form-group">
                                                 <input maxlength="20" class="form-control form-control-sm" required name="modal_cantidad" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" type="text" placeholder="Cantidad existente">
                                             </div>
@@ -285,13 +298,19 @@ session_start();
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 <script>
 $(function() {
-        Showproducto()
+        buscar_bodegas()
+        Showproducto($("#bodega").val())
         buscar_categorias()
         buscar_proveedores()
         console.log( "index!" );
   });
 
     function guardar_productos() {
+        if ($("#bodega").val().length == 0) {
+            notificacion("Por favor seleccione la bodega.", "danger")
+            $("#bodega").focus()
+            return false
+        }
       $.ajax({
         type : 'POST',
         data: $("#form_guardar").serialize(),
@@ -301,7 +320,7 @@ $(function() {
           if (obj.success) {
             notificacion("El producto ha sido guardado exitosamente.", "success")
             limpiar_form()
-            Showproducto()
+            Showproducto($("#bodega").val())
             $("input[name*='nombre']").focus()
           }else{
             alert('Datos invalidos para el acceso')
@@ -315,25 +334,30 @@ $(function() {
     }
 
     function guardar_existencias() {
-      $.ajax({
-        type : 'POST',
-        data: $("#form_existencias").serialize(),
-        url: '/inventario/php/producto/guardar_cantidad.php',
-        success: function(respuesta) {
-          let obj = JSON.parse(respuesta)
-          if (obj.success) {
-            notificacion("Se ha agregado una existencia al producto selenccionado.", "success")
-            Showproducto()
-            $(".close").click()
-            $("input[name*='modal_cantidad']").val("")
-          }else{
-            alert('Datos invalidos para el acceso')
-          }
-        },
-        error: function() {
-          console.log("No se ha podido obtener la información");
+        if ($("#bodega").val().length == 0) {
+            notificacion("Por favor seleccione la bodega.", "danger")
+            $("#bodega").focus()
+            return false
         }
-      });
+        $.ajax({
+            type : 'POST',
+            data: $("#form_existencias").serialize()+"&modal_id="+$("input[name*='modal_id']").val()+"&bodega="+$("#bodega").val(),
+            url: '/inventario/php/producto/guardar_cantidad.php',
+            success: function(respuesta) {
+            let obj = JSON.parse(respuesta)
+            if (obj.success) {
+                notificacion("Se ha agregado una existencia al producto selenccionado.", "success")
+                Showproducto($("#bodega").val())
+                $(".close").click()
+                $("input[name*='modal_cantidad']").val("")
+            }else{
+                alert('Datos invalidos para el acceso')
+            }
+            },
+            error: function() {
+            console.log("No se ha podido obtener la información");
+            }
+        });
       
     }
 
@@ -347,7 +371,7 @@ $(function() {
           if (obj.success) {
             notificacion("El producto ha sido actualizado exitosamente.", "success")
             //limpiar_form()
-            Showproducto()
+            Showproducto($("#bodega").val())
             $("input[name*='nit1']").focus()
           }else{
             alert('Datos invalidos para el acceso')
@@ -360,10 +384,11 @@ $(function() {
       
     }
 
-    function Showproducto() {
+    function Showproducto(bodega) {
         let values = { 
             cod: "1",
-            parametro1: "1"
+            parametro1: "1",
+            parametro2: bodega
         }; 
         $.ajax({
         type : 'POST',
@@ -394,6 +419,7 @@ $(function() {
                         '<td style="display:none">'+val.id_proveedor+'</td>'+
                         '<td style="display:none">'+val.perfil+'</td>'+
                         '<td style="display:none">'+val.state+'</td>'+
+                        '<td>'+bodega+'</td>'+
                         '<td class="editar"><button class="btn btn-warning btn-sm" onclick="ver_editar()" >Editar</button></td>'+
                         '<td class="cantidad" ><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModalCenter" >Stock</button></td>'+
                     '</tr>'
@@ -433,7 +459,7 @@ $(function() {
                 $(this).parents("tr").find("td").each(function(){
                     valores.push($(this).html());
                 });
-                $("#modal_id").val(valores[0])
+                $("#modal_id1").val(valores[0])
                 $("#modal_nombre").val(valores[1])
 
             })
