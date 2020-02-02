@@ -315,12 +315,12 @@ $(function() {
     }
 
     function Showfactura_pendientes(bodega, tipo_venta) {
-        Showfactura_terminadas(tipo_venta)
+        Showfactura_terminadas(bodega, tipo_venta)
         ver_credito(tipo_venta)
         let values = { 
             cod: "1",
             parametro1: tipo_venta,
-            parametro2: bodega
+            parametro2: bodega 
         }; 
         $.ajax({
         type : 'POST',
@@ -377,10 +377,11 @@ $(function() {
     
   }
 
-  function Showfactura_terminadas(tipo_venta) {
+  function Showfactura_terminadas(bodega, tipo_venta) {
         let values = { 
             cod: "3",
-            parametro1: tipo_venta
+            parametro1: tipo_venta,
+            parametro2: bodega
         }; 
         $.ajax({
         type : 'POST',
@@ -441,7 +442,8 @@ $(function() {
         Showdetalle_factura(factura)
         let values = { 
             cod: "2",
-            parametro1: factura
+            parametro1: factura,
+            parametro1: "1"
         }; 
         $.ajax({
         type : 'POST',
