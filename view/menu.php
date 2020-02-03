@@ -89,10 +89,10 @@ session_start();
     });
   }
 
-  function cuentas() {
+  function cuentas(bodega) {
           let values = { 
               cod: "1",
-              parametro1: 1,
+              parametro1: bodega,
               parametro2: 2
           }; 
         $.ajax({
@@ -109,6 +109,7 @@ session_start();
               $('.total_efectivo').text(val.vl_efectivo)
               $('.total_tarjeta').text(val.vl_tarjeta)
               $('.total_credito').text(val.vl_credito)
+              $('.vl_facturas_credito').text(val.vl_facturas_credito)
             });
         },
         error: function() {

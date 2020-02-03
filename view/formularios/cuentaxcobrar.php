@@ -443,7 +443,7 @@ $(function() {
         let values = { 
             cod: "2",
             parametro1: factura,
-            parametro1: "1"
+            parametro2: "1"
         }; 
         $.ajax({
         type : 'POST',

@@ -21,6 +21,7 @@ session_start();
     <!-- Bootstrap core CSS -->
 <link href="/inventario/assets/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <link href="/inventario/assets/css/select2.min.css" rel="stylesheet" crossorigin="anonymous">
+<link href="../../assets/css/bootstrap-datepicker.css" rel="stylesheet" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -115,29 +116,34 @@ session_start();
                             </div>
                         </div>
                         <form class="form" id="form_factura" role="form" onsubmit="event.preventDefault(); return guardar_factura();" autocomplete="off">
-                            <div class="col-sm-12">
-                                <label style="font-size:14px;" for="">Tipo de venta</label>
-                                <hr style="margin-top:-1px;">
-                                <div class="custom-control custom-radio custom-control-inline">
-                                    <input id="debit" value="efectivo" onclick="datos_clientes('0')" name="tipo_venta" type="radio" class="custom-control-input" checked="" required="">
-                                    <label class="custom-control-label" for="debit">Efectivo</label>
+                            <div class="row">
+                                <div class="form-group col-sm-3">
+                                    <label style="font-size:14px" for="">Fecha de venta</label>
+                                    <input class="form-control form-control-sm fecha" required name="fecha_venta" type="text" placeholder="Fecha de venta">
                                 </div>
-                                <div class="custom-control custom-radio custom-control-inline">
-                                    <input id="bank" value="tarjeta" onclick="datos_clientes('0')" name="tipo_venta" type="radio" class="custom-control-input" required="">
-                                    <label class="custom-control-label" for="bank">Tarjeta</label>
+                                <div class="col-sm-9">
+                                    <label style="font-size:14px; margin-top:-1px;" for="">Tipo de venta</label>
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input id="debit" value="efectivo" onclick="datos_clientes('0')" name="tipo_venta" type="radio" class="custom-control-input" checked="" required="">
+                                        <label class="custom-control-label" for="debit">Efectivo</label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input id="bank" value="tarjeta" onclick="datos_clientes('0')" name="tipo_venta" type="radio" class="custom-control-input" required="">
+                                        <label class="custom-control-label" for="bank">Tarjeta</label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input id="credit" value="credito" onclick="datos_clientes('1')" name="tipo_venta" type="radio" class="custom-control-input" required="">
+                                        <label class="custom-control-label" for="credit">Crédito</label>
+                                    </div>
                                 </div>
-                                <div class="custom-control custom-radio custom-control-inline">
-                                    <input id="credit" value="credito" onclick="datos_clientes('1')" name="tipo_venta" type="radio" class="custom-control-input" required="">
-                                    <label class="custom-control-label" for="credit">Crédito</label>
+                                <div id="content_cliente">
                                 </div>
-                            </div>
-                            <div id="content_cliente">
-                            </div>
-                            <div id="btn_guardar" class="col-sm-12">
-                                <button type="submit" class="btn btn-success float-right">Facturar</button>
-                            </div>
-                            <div style="display:none" id="btn_guardar_credito" class="col-sm-12">
-                                <button type="submit" class="btn btn-success float-right">Facturar</button>
+                                <div id="btn_guardar" class="col-sm-12">
+                                    <button type="submit" class="btn btn-success float-right">Facturar</button>
+                                </div>
+                                <div style="display:none" id="btn_guardar_credito" class="col-sm-12">
+                                    <button type="submit" class="btn btn-success float-right">Facturar</button>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -203,12 +209,20 @@ session_start();
     <script src="/inventario/assets/js/jquery.dataTables.min.js"></script>
     <script src="/inventario/assets/js/dataTables.bootstrap4.min.js"></script>
     <script src="/inventario/assets/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="../../assets/js/bootstrap-datepicker.min.js"></script>
+
 <script>
 $(function() {
         buscar_bodegas()
         Showventa()
         buscar_productos()
         console.log( "index!" );
+
+        $('.fecha').datepicker({
+          format: "yyyy-mm-dd",
+          todayHighlight: true,
+          language:"es"                       
+        });
   });
   function guardar_detalle_factura() {
         if ($("#bodega").val() == 0) {
@@ -473,7 +487,7 @@ $(function() {
             let obj = JSON.parse(respuesta)
             let fila = ''
             $.each(obj.resultado, function( index, val ) {
-                fila += '<option value="'+val.identificacion+'">'+val.identificacion+' - '+val.nombre+'</option>';
+                fila += '<option value="'+val.id+'">'+val.identificacion+' - '+val.nombre+'</option>';
             });
             $(".id_cliente").html('<option value="">Seleccione el cliente</option>'+fila)
             let placeholder = "Seleccione el cliente";
