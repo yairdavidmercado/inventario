@@ -47,8 +47,17 @@ session_start();
   <?php require("../menu.php"); ?>
 
 <main role="main" class="container py-5">
-    <div class="py-5 bg-white rounded shadow-sm">
+    <div class="py-3 bg-white rounded shadow-sm">
         <div class="container">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <select ref="select" onchange="cuentas(this.value, $('input[name^=tipo_venta]:checked').val())" class="form-control form-control-sm id_bodegas" id="bodega" name="bodega">
+                            <option value="">Seleccione el bodegas</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="mx-auto col-sm-12">
                     <div class="alert alert-success float-right" style="width:100%">
@@ -127,6 +136,7 @@ session_start();
                                         <th scope="col">Destino de egreso</th>
                                         <th scope="col">Descripción</th>
                                         <th scope="col">Realizado por</th>
+                                        <th scope="col">Bodega</th>
                                         <th scope="col">Fecha</th>
                                         <th style="width:10px" scope="col"></th>
                                     </tr>
@@ -168,7 +178,7 @@ session_start();
 $(function() {
         Showegreso()
         buscar_tipo_egresos()
-        cuentas()
+        buscar_bodegas()
         console.log( "index!" );
   });
 
@@ -202,10 +212,15 @@ $(function() {
     }
 
     function guardar_egresos() {
+        if ($("#bodega").val() == 0) {
+            notificacion("Por favor seleccione la bodega.", "danger")
+            $("#bodega").focus()
+            return false
+        }
         let efectivo = parseInt($("#total_efectivo").text()) 
         let tarjeta = parseInt($("#total_tarjeta").text())
         let credito = parseInt($("#total_credito").text())
-        alert($("#vl_egreso").val() +"  "+ efectivo+" -"+tarjeta+" -"+credito)
+        //alert($("#vl_egreso").val() +"  "+ efectivo+" -"+tarjeta+" -"+credito)
         if ($("input[name^=ubicacion]:checked").val() == "efectivo") {
             if (parseInt($("#vl_egreso").val()) > efectivo ) {
                 notificacion("la cantidad no puede exceder el dinero recaudado en efectivo", 'info')
@@ -227,7 +242,7 @@ $(function() {
       $.ajax({
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         type : 'POST',
-        data: $("#form_guardar").serialize(),
+        data: $("#form_guardar").serialize()+"&bodega="+$("#bodega").val(),
         url: '/inventario/php/egreso/guardar.php',
         success: function(respuesta) {
           let obj = JSON.parse(respuesta)
@@ -272,6 +287,7 @@ $(function() {
                             '<td>'+val.ubicacion+'</td>'+
                             '<td>'+val.descripcion+'</td>'+
                             '<td>'+val.usuario+'</td>'+
+                            '<td>'+val.bodega+'</td>'+
                             '<td>'+val.fecha+'</td>'+
                             '<td class="editar"><a style="cursor:pointer" onclick="confirmar_eliminacion('+val.id+')" ><i style="font-size:11px" class="fa fa-window-close"></i></a></td>'+
                         '</tr>'

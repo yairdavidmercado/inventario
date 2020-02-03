@@ -3,6 +3,7 @@ session_start();
 $tipo_egreso = $_POST["tipo_egreso"];
 $vl_egreso = $_POST["vl_egreso"];
 $ubicacion = $_POST["ubicacion"];
+$bodega = $_POST["bodega"];
 $descripcion = utf8_decode($_POST["descripcion"]);
 $user_id = $_SESSION["idUser"];
 $state = "1";
@@ -16,7 +17,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "CALL guardar_egresos('".$tipo_egreso."', '".$vl_egreso."', '".$ubicacion."', '".$descripcion."','".$user_id."','".$state."');";
+$sql = "CALL guardar_egresos('".$tipo_egreso."', '".$vl_egreso."', '".$ubicacion."', '".$bodega."', '".$descripcion."','".$user_id."','".$state."');";
 $result = $conn->query($sql);
 
 while ($row = $result->fetch_assoc()) {
