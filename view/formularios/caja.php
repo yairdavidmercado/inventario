@@ -203,6 +203,7 @@ session_start();
 <script>
 $(function() {
         console.log( "index!" );
+        permisos("cajas")
         cuentas()
         buscar_bodegas()
 

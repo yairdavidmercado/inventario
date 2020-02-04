@@ -298,8 +298,8 @@ session_start();
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 <script>
 $(function() {
+        permisos("productos")
         buscar_bodegas()
-        Showproducto($("#bodega").val())
         buscar_categorias()
         buscar_proveedores()
         console.log( "index!" );

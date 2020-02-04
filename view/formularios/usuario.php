@@ -187,6 +187,7 @@ session_start();
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 <script>
 $(function() {
+        permisos("usuarios")
         Showusuario()
         console.log( "index!" );
   });

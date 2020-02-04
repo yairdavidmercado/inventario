@@ -176,6 +176,7 @@ session_start();
     <script src="/inventario/assets/js/bootstrap.min.js" crossorigin="anonymous"></script>
 <script>
 $(function() {
+        permisos("egresos")
         Showegreso()
         buscar_tipo_egresos()
         buscar_bodegas()

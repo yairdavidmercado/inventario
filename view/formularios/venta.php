@@ -213,6 +213,7 @@ session_start();
 
 <script>
 $(function() {
+        permisos("ventas")
         buscar_bodegas()
         Showventa()
         buscar_productos()

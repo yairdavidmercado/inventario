@@ -89,6 +89,46 @@ session_start();
     });
   }
 
+  function permisos(modulo) {
+          let values = { 
+              cod: "1",
+              parametro1: idUser,
+              parametro2: profile,
+              parametro3: modulo
+          }; 
+        $.ajax({
+        type : 'POST',
+        data: values,
+        url: '/inventario/php/sel_menu.php',
+        beforeSend: function() {
+            //$(".loader").css("display", "inline-block")
+        },
+        success: function(respuesta) {
+        //$(".loader").css("display", "none")
+            let obj = JSON.parse(respuesta)
+            if (obj.success) {
+                $.each(obj.resultado, function( index, val ) {
+                    if (val.restriccion !== "0") {
+                        alert("Usted no posee permisos para esta acción")
+                        window.location.href = '/inventario/home.php';
+                    }                
+                });    
+            }else{
+                alert("Usted no posee permisos para esta acción")
+                window.location.href = '/inventario/home.php';
+                console.log("No se ha podido obtener la información");
+            }
+            
+        },
+        error: function() {
+            alert("Usted no posee permisos para esta acción")
+            window.location.href = '/inventario/home.php';
+            console.log("No se ha podido obtener la información");
+        }
+    });
+    
+  }
+
   function cuentas(bodega) {
           let values = { 
               cod: "1",
