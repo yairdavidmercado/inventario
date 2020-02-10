@@ -52,7 +52,7 @@ session_start();
             <div class="row">
                 <div class="col-sm-3">
                     <div class="form-group">
-                        <select ref="select" onchange="cuentas(this.value, $('input[name^=tipo_venta]:checked').val())" class="form-control form-control-sm id_bodegas" id="bodega" name="bodega">
+                        <select ref="select" onchange="cuentas(this.value, $('input[name^=tipo_venta]:checked').val()); Showegreso(this.value)" class="form-control form-control-sm id_bodegas" id="bodega" name="bodega">
                             <option value="">Seleccione el bodegas</option>
                         </select>
                     </div>
@@ -177,7 +177,6 @@ session_start();
 <script>
 $(function() {
         permisos("egresos")
-        Showegreso()
         buscar_tipo_egresos()
         buscar_bodegas()
         console.log( "index!" );
@@ -186,7 +185,8 @@ $(function() {
     function buscar_tipo_egresos() {
         let values = { 
                 cod: "2",
-                parametro1: '1'
+                parametro1: '1',
+                parametro2: ''
             }; 
             $.ajax({
             type : 'POST',
@@ -250,7 +250,7 @@ $(function() {
           if (obj.success) {
             notificacion("El egreso ha sido guardado exitosamente.", "success")
             limpiar_form()
-            Showegreso()
+            Showegreso($('#bodega').val())
             cuentas()
             $("input[name*='nombre']").focus()
           }else{
@@ -264,10 +264,11 @@ $(function() {
       
     }
 
-    function Showegreso() {
+    function Showegreso(bodega) {
         let values = { 
             cod: "1",
-            parametro1: "1"
+            parametro1: "1",
+            parametro2: bodega
         }; 
         $.ajax({
             type : 'POST',
@@ -343,7 +344,7 @@ $(function() {
           if (obj.numero == 1) {
             notificacion("el egreso se ha eliminado exitosamente.", "success")
             limpiar_form()
-            Showegreso()
+            Showegreso($('#bodega').val())
             cuentas()
           }else{
             notificacion("El egreso no se encuentra en la base de datos, por favor actualice la página.", "danger")
